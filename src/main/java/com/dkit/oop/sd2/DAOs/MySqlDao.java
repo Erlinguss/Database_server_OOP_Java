@@ -11,14 +11,17 @@ package com.dkit.oop.sd2.DAOs;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
+
+import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
-public class MySqlDao
+public abstract class MySqlDao
 {
     public Connection getConnection() throws DaoException
     {
         String driver = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/user_database";
+        String url = "jdbc:mysql://localhost:3306/restaurantoop";
         String username = "root";
         String password = "";
         Connection connection = null;
@@ -57,4 +60,8 @@ public class MySqlDao
             System.exit(1);
         }
     }
+
+//    public abstract List<User> findAllUsersLastNameContains(String subString) throws DaoException;
+//
+
 }

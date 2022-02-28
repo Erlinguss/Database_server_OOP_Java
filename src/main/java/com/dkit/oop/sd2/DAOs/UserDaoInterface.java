@@ -19,15 +19,31 @@ package com.dkit.oop.sd2.DAOs;
  * can be replaced by mock DAO objects.
  */
 
-import com.dkit.oop.sd2.DTOs.User;
+import com.dkit.oop.sd2.DTOs.RestaurantDTO;
+
 import com.dkit.oop.sd2.Exceptions.DaoException;
+
+import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 
 public interface UserDaoInterface
 {
-    public List<User> findAllUsers() throws DaoException;
 
-    public User findUserByUsernamePassword(String username, String password) throws DaoException;
+    List<RestaurantDTO> findAllRestaurants() throws SQLException;
+
+    RestaurantDTO findRestaurantById(int id) throws SQLException;
+
+    RestaurantDTO updatePhone(String name, int phone) throws DaoException;
+
+    void deleteRestaurantById(int id) throws SQLException;
+
+    List<RestaurantDTO> findAllManagerContains(String subString) throws DaoException;
+
+    RestaurantDTO insertRestaurant(RestaurantDTO restaurantDTO) throws SQLException;
+
+    List<RestaurantDTO> findRestaurantsUsingFilter(Comparator<RestaurantDTO> comparator) throws SQLException;
+
 
 }
 
