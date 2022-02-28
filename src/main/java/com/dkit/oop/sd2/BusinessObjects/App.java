@@ -19,6 +19,8 @@ public class App
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+
+            System.out.println("=========================================");
             System.out.println("Please select an option:");
             System.out.println("1. View all restaurants");
             System.out.println("2. Search for a restaurant by ID");
@@ -26,6 +28,7 @@ public class App
             System.out.println("4. Delete a restaurant by ID");
             System.out.println("5. View all restaurants sorted by rating");
             System.out.println("6. Exit");
+            System.out.println("=========================================");
 
             int choice = scanner.nextInt();
             switch (choice) {
