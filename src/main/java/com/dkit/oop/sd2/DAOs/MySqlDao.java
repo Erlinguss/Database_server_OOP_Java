@@ -61,7 +61,6 @@ public abstract class MySqlDao
         }
     }
 
-//    public abstract List<User> findAllUsersLastNameContains(String subString) throws DaoException;
-//
+
 
 }
