@@ -29,7 +29,7 @@ public class App
             System.out.println("5. View all restaurants sorted by rating");
             System.out.println("6. Exit");
             System.out.println("=========================================");
-
+            System.out.println("=========================================");
 
             int choice = scanner.nextInt();
             switch (choice) {
