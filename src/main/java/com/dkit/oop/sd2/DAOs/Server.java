@@ -95,31 +95,14 @@ public class Server {
 
                     }
 
-                    /* ========================== TO DISPLAY ALL RESTAURANTS========================= */
-//                    else if (message.startsWith("Find restaurant"))
-//                    {
-//                        LocalTime time =  LocalTime.now();
-//                        // sends current time to client
-//                        try {
-//                            List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
-//                            System.out.println(restaurants);
-//                            //Gson gson = new Gson();
-//                            socketWriter.println(restaurants);
-//
-//                        } catch (SQLException exception) {
-//                            throw new RuntimeException(exception);
-//                        }
-//                    }
 
-                    //====================================working perfectly====================
+                    /* ========================== TO DISPLAY ALL RESTAURANTS========================= */
                     else if (message.startsWith("displayAllRestaurants")) {
                         try {
                             System.out.println();
-//                            List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
-//                            System.out.println(restaurants);
-                            //Gson gson = new Gson();
-                            displayAllRestaurants();
-//                            socketWriter.println(restaurants);
+
+                            displayAllRestaurantsAsJson();
+
 
                         } catch (SQLException exception) {
                             throw new RuntimeException(exception);
@@ -131,19 +114,16 @@ public class Server {
 
                         String tokens[] = message.split(" ");  // default delimiter is a space
 
-                        // = Integer.parseInt(message.substring(22));
-
                         int id =  Integer.parseInt( tokens[1] );
                         System.out.println("In run() command=" + tokens[0] + ", id from client =" + tokens[1]);
                         String response = getRestaurantByIdAsJSON(id);
-
 
                         socketWriter.println(response); // send message to client
 
                     } else {
                         socketWriter.println("I'm sorry I don't understand :(");
                     }
-                    // socket.close();
+
 
                 }
 
@@ -158,7 +138,7 @@ public class Server {
                 System.out.println("Server: (ClientHandler): Exception: " + e);
             }
         }
-        public void displayAllRestaurants() throws IOException, SQLException {
+        public void displayAllRestaurantsAsJson() throws IOException, SQLException {
             UserDaoInterface restDao = new MySqlUserDao();
             List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
 
@@ -195,7 +175,6 @@ public class Server {
             System.out.println(responseMsg);
         }
 
-
         public String getRestaurantByIdAsJSON(int id) throws IOException, SQLException {
             Scanner input = new Scanner(System.in);
 
@@ -210,8 +189,6 @@ public class Server {
                 response = "{}"; // empty object
             } else {
 
-
-
                 JSONObject restaurantJsonObject = new JSONObject();
                 restaurantJsonObject.put("id",restaurant.getId() );
                 restaurantJsonObject.put("name",restaurant.getName() );
@@ -222,8 +199,6 @@ public class Server {
 
                 response = restaurantJsonObject.toString();
 
-//                System.out.println("Restaurant details:");
-//                System.out.println(restaurant.toString());
             }
 
             return response;  // which is JSON String format
