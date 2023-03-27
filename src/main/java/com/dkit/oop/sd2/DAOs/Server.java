@@ -76,7 +76,7 @@ public class Server {
 
         @Override
         public void run() {
-           // Scanner scanner = new Scanner(System.in);
+            // Scanner scanner = new Scanner(System.in);
             String message;
             try {
                 while ((message = socketReader.readLine()) != null) {
@@ -129,8 +129,12 @@ public class Server {
                         restaurant.setRating(rating);
                         String response1 = addRestaurantAsJson(restaurant);
 
-                        socketWriter.println(response1); // send message to client
-                        socketWriter.println("Restaurant added successfully!");
+                        // send message to client
+
+                       socketWriter.println(response1 );
+                      // socketWriter.println("Restaurant added successfully!" );
+
+
                     }
 
                     /* ============================ DELETE A RESTAURANT BY ID ============================ */
@@ -142,7 +146,6 @@ public class Server {
                             int id = Integer.parseInt(tokens[1]);
                             String response = DeleteRestaurantAsJson(id);
                             socketWriter.println(response);// send message to client
-
 
                         } catch (SQLException exception) {
                             throw new RuntimeException(exception);
@@ -193,19 +196,14 @@ public class Server {
             response.put("command", "displayAllRestaurants");
             response.put("restaurants", restaurantArray);
 
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            out.println(response.toString());
+             this.socketWriter.println(response.toString());
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String responseMsg = in.readLine();
-
-            System.out.println(responseMsg);
         }
+
 
         /* ===================== METHOD TO DISPLAY RESTAURANTS BY ID AS JSON========================= */
 
         public String getRestaurantByIdAsJSON(int id) throws IOException, SQLException {
-           // Scanner input = new Scanner(System.in);
 
             UserDaoInterface restDao = new MySqlUserDao();
             RestaurantDTO restaurant = restDao.findRestaurantById(id);

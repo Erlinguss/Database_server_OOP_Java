@@ -63,7 +63,6 @@ public class Client {
                     case "2":
                         /* ========================= COMMAND TO DISPLAY RESTAURANTS BY ID======================= */
                         System.out.println("Please enter a Restaurant ID: ");
-                        //System.out.print("> ");
                         String strId = in.nextLine();
 
                         String request = "getById " + strId;
@@ -75,7 +74,7 @@ public class Client {
                         else {
                             System.out.println(jsonString2);
                         }
-                        in.nextLine(); // Consume newline character
+                       // in.nextLine(); // Consume newline character
                         break;
 
                     case "3":
@@ -88,7 +87,7 @@ public class Client {
 
                         String response = socketReader.nextLine(); // Wait for response from server
                         System.out.println(response);
-                        in.nextLine();
+                       // in.nextLine();
                         break;
 
                     case "4":
@@ -105,12 +104,12 @@ public class Client {
                         } else {
                             System.out.println("Restaurant deleted successfully!");
                         }
-                        in.nextLine();
+                       // in.nextLine();
                         break;
 
                     case "5":
                         System.out.println("Exiting...");
-                        break;
+                        return;
                     default:
                         System.out.println("Invalid choice");
                         break;

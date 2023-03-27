@@ -83,7 +83,7 @@ public class App
 
 
     /*==========================METHOD TO DISPLAY ALL RESTAURANTS=========================*/
-    private static void viewAllRestaurants( UserDaoInterface restDao) throws SQLException {
+    public static void viewAllRestaurants( UserDaoInterface restDao) throws SQLException {
 
         List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
         for (RestaurantDTO restaurant : restaurants) {
@@ -92,7 +92,7 @@ public class App
     }
 
     /*=======================METHOD TO SEARCH RESTAURANTS BY ID =========================*/
-    private static void searchRestaurantById(UserDaoInterface restDao,Scanner scanner) throws SQLException {
+    public  static void searchRestaurantById(UserDaoInterface restDao,Scanner scanner) throws SQLException {
 
         System.out.print("Enter restaurant ID: ");
         int id = scanner.nextInt();
@@ -105,7 +105,7 @@ public class App
     }
 
     /*===========================METHOD TO ADD A NEW RESTAURANT=========================*/
-    private static void addNewRestaurant(UserDaoInterface restDao,Scanner scanner) throws SQLException {
+    public  static void addNewRestaurant(UserDaoInterface restDao,Scanner scanner) throws SQLException {
 
         System.out.print("Enter restaurant name: ");
         String name = scanner.next();
@@ -121,16 +121,22 @@ public class App
     }
 
     /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
-    private static void deleteRestaurantById( UserDaoInterface restDao, Scanner scanner) throws SQLException {
+    public static void deleteRestaurantById( UserDaoInterface restDao, Scanner scanner) throws SQLException {
 
         System.out.print("Enter restaurant ID: ");
         int id = scanner.nextInt();
-        restDao.deleteRestaurantById(id);
+        boolean restaurant  = restDao.deleteRestaurantById(id);
+        if (restaurant){
         System.out.println("Restaurant deleted successfully.");
+    } else {
+            System.out.println("Restaurant with Id "+id+" not found.");
+        }
     }
 
+
+
     /*=================METHOD TO SORT ALL RESTAURANTS BY RATING ========================*/
-    private static void viewRestaurantsSortedByRating(UserDaoInterface restDao) throws SQLException {
+    public static void viewRestaurantsSortedByRating(UserDaoInterface restDao) throws SQLException {
 
         List<RestaurantDTO> restaurants = restDao.findRestaurantsUsingFilter(Comparator.comparingDouble(RestaurantDTO::getRating).reversed());
         for (RestaurantDTO restaurant : restaurants) {
