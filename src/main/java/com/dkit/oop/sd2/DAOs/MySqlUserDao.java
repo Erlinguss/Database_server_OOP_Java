@@ -162,8 +162,6 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
 
           restList.add(rest);
 
-
-
             }
         } catch (SQLException e) {
             throw new DaoException("Error finding all managers that contains: " + e.getMessage());

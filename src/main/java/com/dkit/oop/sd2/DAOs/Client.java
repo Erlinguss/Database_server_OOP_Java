@@ -40,7 +40,8 @@ public class Client
 
             System.out.println("Client message: The Client is running and has connected to the server");
 
-            System.out.println("Please enter a command:  (\"Time\" to get time, or \"Echo message\" to get echo) \n>");
+           // System.out.println("Please enter a command:  (\"Time\" to get time, or \"Echo message\" to get echo) \n>");
+            System.out.println("Please enter a command:   \n>");
             String command = in.nextLine();
 
             OutputStream os = socket.getOutputStream();
@@ -75,7 +76,30 @@ public class Client
                     System.out.println(JsonString);
                 }
 
+            } else if(command.startsWith("addRestaurant")) {
+                System.out.println("Please enter restaurant details in the format: Name, Manager, Phone, Rating\n>");
+                String restaurantDetails = in.nextLine();
+                String request = command + " " + restaurantDetails;
+                socketWriter.println(request);          //SEND REQUEST TO SERVER
+
+                String response = socketReader.nextLine(); // WAIT FOR RESPONSE FROM SERVER
+                System.out.println(response);
             }
+
+
+//
+//            else if (command.startsWith("deleteRestaurant")) {
+//                System.out.print("Enter ID of the restaurant to delete: ");
+//                int id = Integer.parseInt(in.nextLine());
+//                String deleteCommand = "deleteRestaurant " + id;
+//                System.out.println(deleteCommand);
+//                System.out.println("The restaurant with the Id "+id+ " Was Deleted!");
+//
+//            }
+
+
+
+
             else                            // the user has entered the Echo command or an invalid command
             {
                 System.out.println("Invalid command");
