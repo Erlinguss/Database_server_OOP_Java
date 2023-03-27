@@ -2,6 +2,8 @@
 
 package com.dkit.oop.sd2.DAOs;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -53,6 +55,8 @@ public class Client {
                         /* ========================= COMMAND TO DISPLAY ALL RESTAURANTS========================= */
                         socketWriter.println("displayAllRestaurants");
                         String jsonString1 = socketReader.nextLine();
+                        // Parse JSON response
+                        JSONObject response1 = new JSONObject(jsonString1);
                         System.out.println("Client message: Response from server Time: " + jsonString1);
                         break;
 
