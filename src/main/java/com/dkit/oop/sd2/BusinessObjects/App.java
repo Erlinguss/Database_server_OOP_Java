@@ -65,24 +65,8 @@ public class App
                         System.out.println(findRestaurantByIdAsJson(restDao,scanner));
                         System.out.println();
                         break;
-                    case 8:
-                        System.out.println("Exiting...");
-                        return;
-                    default:
-                        System.out.println("Invalid choice, please try again.");
-                        System.out.println();
-                        break;
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input, please enter a number.");
-                System.out.println();
-                scanner.next();
-            }
-        }
-    }
 
-
-//      case 8:
+                    //      case 8:
 //    displayAllEntities();
 //                        System.out.println();
 //                        break;
@@ -101,6 +85,22 @@ public class App
 //                    case 12:
 //                            System.out.println("Exiting...");
 //                        return;
+                    case 8:
+                        System.out.println("Exiting...");
+                        return;
+                    default:
+                        System.out.println("Invalid choice, please try again.");
+                        System.out.println();
+                        break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input, please enter a number.");
+                System.out.println();
+                scanner.next();
+            }
+        }
+    }
+
 
     /*==========================METHOD TO DISPLAY ALL RESTAURANTS=========================*/
     private static void viewAllRestaurants( UserDaoInterface restDao) throws SQLException {
