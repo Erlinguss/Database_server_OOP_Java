@@ -8,7 +8,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -84,19 +83,9 @@ public class Server {
                 while ((message = socketReader.readLine()) != null) {
                     System.out.println("Server: (ClientHandler): Read command from client " + clientNumber + ": " + message);
 
-                    if (message.startsWith("Time")) {
-                        LocalTime time = LocalTime.now();
-                        socketWriter.println(time); // sends current time to client
 
-                    } else if (message.startsWith("Echo")) {
-                        message = message.substring(5); // strip off the 'Echo ' part
-                        socketWriter.println(message); // send message to client
-
-                    }
-
-
-                    /* ========================== TO DISPLAY ALL RESTAURANTS========================= */
-                    else if (message.startsWith("displayAllRestaurants")) {
+                    /* ============================ TO DISPLAY ALL RESTAURANTS========================= */
+                    if (message.startsWith("displayAllRestaurants")) {
                         try {
                             System.out.println();
 
@@ -112,14 +101,14 @@ public class Server {
 
                         String tokens[] = message.split(" ");  // default delimiter is a space
 
-                        int id =  Integer.parseInt( tokens[1] );
+                        int id = Integer.parseInt(tokens[1]);
                         System.out.println("In run() command=" + tokens[0] + ", id from client =" + tokens[1]);
                         String response = getRestaurantByIdAsJSON(id);
 
                         socketWriter.println(response); // send message to client
                     }
 
-//
+
                     /* ============================ TO ADD A RESTAURANTS ============================ */
                     else if (message.startsWith("addRestaurant")) {
                         String[] tokens = message.split(", ");
@@ -151,29 +140,24 @@ public class Server {
                         socketWriter.println("Restaurant added successfully!");
                     }
 
-//                    else if (message.startsWith("deleteRestaurant")) {
-//                        int id = Integer.parseInt(message.split(" ")[1]);
-//                        boolean success = restDao.;
-//                        String response = deleteRestaurantAsJason(id);
-//                        socketWriter.println(response);
+                    /* ============================ DELETE A RESTAURANT BY ID ============================ */
+                    else if (message.startsWith("deleteRestaurant")) {
+
+                        try {
+                            System.out.println();
+                            String tokens[] = message.split(" ");
+                            int id = Integer.parseInt(tokens[1]);
+                            String response = DeleteRestaurantAsJson(id);
+                            socketWriter.println(response);// send message to client
 
 
-//                        ====follow this idea for this method========
-//                        String tokens[] = message.split(" ");  // default delimiter is a space
-//
-//                        int id =  Integer.parseInt( tokens[1] );
-//                        System.out.println("In run() command=" + tokens[0] + ", id from client =" + tokens[1]);
-//                        String response = getRestaurantByIdAsJSON(id);
-//
-//                        socketWriter.println(response); // send message to client
+                        } catch (SQLException exception) {
+                            throw new RuntimeException(exception);
+                        }
 
-//                    }
-
-
-                    else {
+                    } else {
                         socketWriter.println("I'm sorry I don't understand :(");
                     }
-
 
                 }
 
@@ -188,6 +172,8 @@ public class Server {
                 System.out.println("Server: (ClientHandler): Exception: " + e);
             }
         }
+
+        /* ============================METHOD TO DISPLAY ALL RESTAURANTS AS JSON========================= */
         public void displayAllRestaurantsAsJson() throws IOException, SQLException {
             UserDaoInterface restDao = new MySqlUserDao();
             List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
@@ -223,6 +209,8 @@ public class Server {
             System.out.println(responseMsg);
         }
 
+        /* ===================== METHOD TO DISPLAY RESTAURANTS BY ID AS JSON========================= */
+
         public String getRestaurantByIdAsJSON(int id) throws IOException, SQLException {
             Scanner input = new Scanner(System.in);
 
@@ -232,16 +220,16 @@ public class Server {
             String response = null;
 
             if (restaurant == null) {
-                System.out.println("No restaurant found with ID: " + id + ", so, return a JSon String wit empty object");
+                System.out.println("No restaurant found with ID: " + id + ", so, return a JSon String with empty object");
                 response = "{}"; // empty object
             } else {
 
                 JSONObject restaurantJsonObject = new JSONObject();
-                restaurantJsonObject.put("id",restaurant.getId() );
-                restaurantJsonObject.put("name",restaurant.getName() );
-                restaurantJsonObject.put("manager",restaurant.getManager() );
-                restaurantJsonObject.put("phone",restaurant.getPhone() );
-                restaurantJsonObject.put("rating",restaurant.getRating() );
+                restaurantJsonObject.put("id", restaurant.getId());
+                restaurantJsonObject.put("name", restaurant.getName());
+                restaurantJsonObject.put("manager", restaurant.getManager());
+                restaurantJsonObject.put("phone", restaurant.getPhone());
+                restaurantJsonObject.put("rating", restaurant.getRating());
 
 
                 response = restaurantJsonObject.toString();
@@ -251,7 +239,8 @@ public class Server {
             return response;  // which is JSON String format
         }
 
-        public String addRestaurantAsJson (RestaurantDTO restaurantDTO) throws IOException, SQLException{
+        /* ============================METHOD TO ADD A RESTAURANT AS JSON ============================ */
+        public String addRestaurantAsJson(RestaurantDTO restaurantDTO) throws IOException, SQLException {
 
             UserDaoInterface restDao = new MySqlUserDao();
             RestaurantDTO restaurants = restDao.insertRestaurant(restaurantDTO);
@@ -265,10 +254,23 @@ public class Server {
 
         }
 
+        /* ============================ DELETE A RESTAURANT BY ID AS JSON============================ */
+        public String DeleteRestaurantAsJson(int id) throws IOException, SQLException {
 
-//        public String deleteRestaurantAsJason() throws IOException, SQLException{
-//
-//        }
+            UserDaoInterface restDao = new MySqlUserDao();
+            JSONObject restaurantJsonObject = new JSONObject();
+            String response;
+            System.out.println();
+            if (restDao.deleteRestaurantById(id)) {
+                restaurantJsonObject.put("id", id);
+                response = String.valueOf(restaurantJsonObject.put("message", "The restaurant with the Id " + id + " was deleted!"));
+            } else {
+                restaurantJsonObject.put("id", id);
+                response = String.valueOf(restaurantJsonObject.put("message", "There was no restaurant for the id you specified"));
+            }
+
+            return response;
+        }
 
     }
 }

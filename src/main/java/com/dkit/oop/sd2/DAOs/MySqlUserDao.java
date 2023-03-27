@@ -212,7 +212,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
 
     /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
     @Override
-    public void deleteRestaurantById(int id)  throws DaoException {
+    public boolean deleteRestaurantById(int id)  throws DaoException {
 
 
         String sql = "DELETE FROM restaurant WHERE id=?";
@@ -227,6 +227,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
         } catch (SQLException e) {
             throw new DaoException("Error deleting restaurant by id: " + e.getMessage());
         }
+        return false;
     }
 
     /*=================METHOD TO SORT ALL RESTAURANTS BY FILTER========================*/

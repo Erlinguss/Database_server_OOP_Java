@@ -36,7 +36,7 @@ public interface UserDaoInterface
 
     RestaurantDTO updatePhone(String name, int phone) throws DaoException;
 
-    void deleteRestaurantById(int id) throws SQLException;
+    boolean deleteRestaurantById(int id) throws SQLException;
 
     List<RestaurantDTO> findAllManagerContains(String subString) throws DaoException;
 
