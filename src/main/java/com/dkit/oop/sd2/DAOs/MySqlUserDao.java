@@ -26,10 +26,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-
 public class MySqlUserDao extends MySqlDao implements UserDaoInterface
 {
 
+    /*==========================METHOD TO DISPLAY ALL RESTAURANTS=========================*/
     @Override
     public List<RestaurantDTO> findAllRestaurants() throws SQLException
     {
@@ -85,6 +85,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
         return restaurants;     // may be empty
     }
 
+    /*=======================METHOD TO SEARCH RESTAURANTS BY ID =========================*/
     @Override
     public RestaurantDTO findRestaurantById(int id) throws SQLException
     {
@@ -140,7 +141,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
     }
 
 
-
+    /*===================METHOD TO FIND ALL MANAGER WITH SPECIFIC NAME=====================*/
     @Override
     public List<RestaurantDTO> findAllManagerContains(String subString) throws DaoException {
 
@@ -172,7 +173,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
 
         return restList;
     }
-
+    /*===========================METHOD TO ADD A NEW RESTAURANT=========================*/
     @Override
     public RestaurantDTO insertRestaurant(RestaurantDTO restaurantDTO)  throws DaoException {
         String sql = "INSERT INTO restaurant ( name, manager, phone, rating) VALUES (?, ?, ?, ?)";
@@ -194,7 +195,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
         return restaurantDTO;
     }
 
-
+    /*====================METHOD TO UPDATE PHONE FROM THE RESTAURANT===================*/
     @Override
     public RestaurantDTO updatePhone(String name, int phone) throws DaoException {
         String sql = "UPDATE restaurant SET phone = ? WHERE name = ?";
@@ -213,6 +214,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
         return null;
     }
 
+    /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
     @Override
     public void deleteRestaurantById(int id)  throws DaoException {
 
@@ -231,14 +233,13 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
         }
     }
 
+    /*=================METHOD TO SORT ALL RESTAURANTS BY FILTER========================*/
     @Override
     public List<RestaurantDTO> findRestaurantsUsingFilter(Comparator<RestaurantDTO> comparator) throws SQLException {
         List<RestaurantDTO> restaurants = findAllRestaurants();
         restaurants.sort(comparator);
         return restaurants;
     }
-
-
 
 
 }
