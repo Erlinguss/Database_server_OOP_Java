@@ -64,4 +64,6 @@ public class RestaurantDTO {
                 ", rating=" + rating +
                 '}';
     }
+
+
 }

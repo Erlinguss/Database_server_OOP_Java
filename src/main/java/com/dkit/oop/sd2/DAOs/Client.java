@@ -64,7 +64,19 @@ public class Client
 
 
             //===============================================
-            if(command.startsWith("Find restaurant"))   //we expect the server to return a time
+            if(command.startsWith("Find restaurant"))   //we expect the server to return all restaurants
+            {
+                String JsonString= socketReader.nextLine();
+                System.out.println("Client message: Response from server Time: " + JsonString);
+            }
+            else                            // the user has entered the Echo command or an invalid command
+            {
+                String input = socketReader.nextLine();
+                System.out.println("Client message: Response from server: \"" + input + "\"");
+            }
+
+            //===============================================
+            if(command.startsWith("Find restaurant by id"))   //we expect the server to return restaurant by id
             {
                 String JsonString= socketReader.nextLine();
                 System.out.println("Client message: Response from server Time: " + JsonString);
@@ -85,7 +97,5 @@ public class Client
         }
     }
 
-
-//  LocalTime time = LocalTime.parse(timeString); // Parse timeString -> convert to LocalTime object if required
 
 }
