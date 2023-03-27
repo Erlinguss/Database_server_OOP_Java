@@ -4,15 +4,14 @@ import com.dkit.oop.sd2.DAOs.MySqlUserDao;
 import com.dkit.oop.sd2.DAOs.UserDaoInterface;
 import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.sql.SQLException;
+import java.util.*;
 public class App
 {
+    private static Set<Integer> cache = new HashSet<>(); // Feature 6
     public static void main(String[] args) throws SQLException {
         UserDaoInterface restDao = new MySqlUserDao();  //"IUserDao" -> "I" stands for for
 
@@ -27,10 +26,11 @@ public class App
             System.out.println("3. Add a new restaurant");
             System.out.println("4. Delete a restaurant by ID");
             System.out.println("5. View all restaurants sorted by rating");
-            System.out.println("6. Exit");
+            System.out.println("6. Find all restaurants as JSON");
+            System.out.println("7. Find a restaurant by ID as JSON");
+            System.out.println("8. Exit");
             System.out.println("=========================================");
             System.out.println("=========================================");
-
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1:
@@ -48,7 +48,19 @@ public class App
                 case 5:
                     viewRestaurantsSortedByRating();
                     break;
+//                case 6:
+//                    findAllRestaurantsAsJson();
+//                    break;
+//                case 7:
+//                    findRestaurantByIdAsJson(scanner);
+//                    break;
                 case 6:
+                    System.out.println(findAllRestaurantsAsJson());
+                    break;
+                case 7:
+                    System.out.println(findRestaurantByIdAsJson(scanner));
+                    break;
+                case 8:
                     System.out.println("Exiting...");
                     return;
                 default:
@@ -91,7 +103,7 @@ public class App
         double rating = scanner.nextDouble();
         RestaurantDTO restaurantDTO = new RestaurantDTO(0, name, manager, phone, rating);
         restaurantDTO = restDao.insertRestaurant(restaurantDTO);
-        System.out.println("New restaurant added with ID: " + restaurantDTO.getId());
+        System.out.println("New restaurant was added successfully");
     }
 
     private static void deleteRestaurantById(Scanner scanner) throws SQLException {
@@ -109,5 +121,45 @@ public class App
             System.out.println(restaurant);
         }
     }
+
+    public static String findAllRestaurantsAsJson() throws SQLException {
+        UserDaoInterface restDao = new MySqlUserDao();
+        List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
+        //Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        try {
+            return gson.toJson(restaurants);
+        } catch (Exception e) {
+            throw new DaoException("Error converting restaurants to JSON");
+        }
+    }
+
+    public static String findRestaurantByIdAsJson(Scanner scanner) throws SQLException {
+        UserDaoInterface restDao = new MySqlUserDao();
+        System.out.print("Enter restaurant ID: ");
+        int id = scanner.nextInt();
+        RestaurantDTO restaurant = restDao.findRestaurantById(id);
+        if (restaurant != null) {
+           // Gson gson = new Gson();
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            try {
+                return gson.toJson(restaurant);
+            } catch (Exception e) {
+                throw new DaoException("Error converting restaurant to JSON");
+            }
+        } else {
+            return "Restaurant not found.";
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 }

@@ -8,13 +8,11 @@ package com.dkit.oop.sd2.DAOs;
  *
  */
 
+import com.dkit.oop.sd2.Exceptions.DaoException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.List;
-
-import com.dkit.oop.sd2.DTOs.RestaurantDTO;
-import com.dkit.oop.sd2.Exceptions.DaoException;
 
 public abstract class MySqlDao
 {
@@ -60,7 +58,5 @@ public abstract class MySqlDao
             System.exit(1);
         }
     }
-
-
 
 }

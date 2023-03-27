@@ -190,7 +190,8 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
             throw new DaoException("Error adding restaurant: " + e.getMessage());
         }
 
-        return null;
+//        return null;
+        return restaurantDTO;
     }
 
 
@@ -236,6 +237,8 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
         restaurants.sort(comparator);
         return restaurants;
     }
+
+
 
 
 }
