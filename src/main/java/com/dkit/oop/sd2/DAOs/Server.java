@@ -19,7 +19,7 @@ public class Server {
 
     public void start() {
         try {
-            ServerSocket ss = new ServerSocket(9999);  // set up ServerSocket to listen for connections on port 8080
+            ServerSocket ss = new ServerSocket(8080);  // set up ServerSocket to listen for connections on port 8080
 
             System.out.println("Server: Server started. Listening for connections on port 8080...");
 

@@ -33,7 +33,7 @@ public class Client {
     public void start() {
         Scanner in = new Scanner(System.in);
         try {
-            Socket socket = new Socket("localhost", 9999);  // connect to server socket
+            Socket socket = new Socket("localhost", 8080);  // connect to server socket
             System.out.println("Client: Port# of this client : " + socket.getLocalPort());
             System.out.println("Client: Port# of Server :" + socket.getPort());
 
