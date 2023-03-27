@@ -13,11 +13,12 @@ public class App
 {
     private static Set<Integer> cache = new HashSet<>(); // Feature 6
     public static void main(String[] args) throws SQLException {
-        UserDaoInterface restDao = new MySqlUserDao();  //"IUserDao" -> "I" stands for for
+//        UserDaoInterface restDao = new MySqlUserDao();  //"IUserDao" -> "I" stands for for
 
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+
             System.out.println("=================Menu System================");
             System.out.println("============================================");
             System.out.println("|        Please select an option:          |");
@@ -31,35 +32,37 @@ public class App
             System.out.println("| 8. Exit                                  |");
             System.out.println("============================================");
             System.out.println("============================================");
+
             try {
+                UserDaoInterface restDao = new MySqlUserDao();
                 int choice = scanner.nextInt();
                 switch (choice) {
                     case 1:
-                        viewAllRestaurants();
+                        viewAllRestaurants(restDao);
                         System.out.println();
                         break;
                     case 2:
-                        searchRestaurantById(scanner);
+                        searchRestaurantById(restDao, scanner);
                         System.out.println();
                         break;
                     case 3:
-                        addNewRestaurant(scanner);
+                        addNewRestaurant(restDao,scanner);
                         System.out.println();
                         break;
                     case 4:
-                        deleteRestaurantById(scanner);
+                        deleteRestaurantById(restDao,scanner);
                         System.out.println();
                         break;
                     case 5:
-                        viewRestaurantsSortedByRating();
+                        viewRestaurantsSortedByRating(restDao);
                         System.out.println();
                         break;
                     case 6:
-                        System.out.println(findAllRestaurantsAsJson());
+                        System.out.println(findAllRestaurantsAsJson(restDao));
                         System.out.println();
                         break;
                     case 7:
-                        System.out.println(findRestaurantByIdAsJson(scanner));
+                        System.out.println(findRestaurantByIdAsJson(restDao,scanner));
                         System.out.println();
                         break;
                     case 8:
@@ -100,8 +103,8 @@ public class App
 //                        return;
 
     /*==========================METHOD TO DISPLAY ALL RESTAURANTS=========================*/
-    private static void viewAllRestaurants() throws SQLException {
-        UserDaoInterface restDao = new MySqlUserDao();
+    private static void viewAllRestaurants( UserDaoInterface restDao) throws SQLException {
+//        UserDaoInterface restDao = new MySqlUserDao();
         List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
         for (RestaurantDTO restaurant : restaurants) {
             System.out.println(restaurant);
@@ -109,8 +112,8 @@ public class App
     }
 
     /*=======================METHOD TO SEARCH RESTAURANTS BY ID =========================*/
-    private static void searchRestaurantById(Scanner scanner) throws SQLException {
-        UserDaoInterface restDao = new MySqlUserDao();
+    private static void searchRestaurantById(UserDaoInterface restDao,Scanner scanner) throws SQLException {
+       // UserDaoInterface restDao = new MySqlUserDao();
         System.out.print("Enter restaurant ID: ");
         int id = scanner.nextInt();
         RestaurantDTO restaurant = restDao.findRestaurantById(id);
@@ -122,8 +125,8 @@ public class App
     }
 
     /*===========================METHOD TO ADD A NEW RESTAURANT=========================*/
-    private static void addNewRestaurant(Scanner scanner) throws SQLException {
-        UserDaoInterface restDao = new MySqlUserDao();
+    private static void addNewRestaurant(UserDaoInterface restDao,Scanner scanner) throws SQLException {
+//        UserDaoInterface restDao = new MySqlUserDao();
         System.out.print("Enter restaurant name: ");
         String name = scanner.next();
         System.out.print("Enter restaurant manager: ");
@@ -138,8 +141,8 @@ public class App
     }
 
     /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
-    private static void deleteRestaurantById(Scanner scanner) throws SQLException {
-        UserDaoInterface restDao = new MySqlUserDao();
+    private static void deleteRestaurantById( UserDaoInterface restDao, Scanner scanner) throws SQLException {
+//        UserDaoInterface restDao = new MySqlUserDao();
         System.out.print("Enter restaurant ID: ");
         int id = scanner.nextInt();
         restDao.deleteRestaurantById(id);
@@ -147,8 +150,8 @@ public class App
     }
 
     /*=================METHOD TO SORT ALL RESTAURANTS BY RATING ========================*/
-    private static void viewRestaurantsSortedByRating() throws SQLException {
-        UserDaoInterface restDao = new MySqlUserDao();
+    private static void viewRestaurantsSortedByRating(UserDaoInterface restDao) throws SQLException {
+//        UserDaoInterface restDao = new MySqlUserDao();
         List<RestaurantDTO> restaurants = restDao.findRestaurantsUsingFilter(Comparator.comparingDouble(RestaurantDTO::getRating).reversed());
         for (RestaurantDTO restaurant : restaurants) {
             System.out.println(restaurant);
@@ -156,8 +159,8 @@ public class App
     }
 
     /*============METHOD TO DISPLAY ALL RESTAURANTS AS JSON FORMAT ====================*/
-    public static String findAllRestaurantsAsJson() throws SQLException {
-        UserDaoInterface restDao = new MySqlUserDao();
+    public static String findAllRestaurantsAsJson(UserDaoInterface restDao) throws SQLException {
+//        UserDaoInterface restDao = new MySqlUserDao();
         List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
         //Gson gson = new Gson(); Displaying the Json data in line
         Gson gson = new GsonBuilder().setPrettyPrinting().create();// Displaying the data en Json format
@@ -170,14 +173,14 @@ public class App
     }
 
     /*========METHOD TO FIND A RESTAURANT BY ID AND DISPLAYED AS JSON FORMAT==========*/
-    public static String findRestaurantByIdAsJson(Scanner scanner) throws SQLException {
-        UserDaoInterface restDao = new MySqlUserDao();
+    public static String findRestaurantByIdAsJson(UserDaoInterface restDao,Scanner scanner) throws SQLException {
+//        UserDaoInterface restDao = new MySqlUserDao();
         System.out.print("Enter restaurant ID: ");
         int id = scanner.nextInt();
         RestaurantDTO restaurant = restDao.findRestaurantById(id);
         if (restaurant != null) {
            // Gson gson = new Gson(); Displaying the Json data in line
-            Gson gson = new GsonBuilder().setPrettyPrinting().create(); // Displaying the data en Json format
+            Gson gson = new GsonBuilder().setPrettyPrinting().create(); // Displaying the data as Json format
             try {
                 return gson.toJson(restaurant);
             } catch (Exception e) {
@@ -187,6 +190,4 @@ public class App
             return "Restaurant not found.";
         }
     }
-
-
 }

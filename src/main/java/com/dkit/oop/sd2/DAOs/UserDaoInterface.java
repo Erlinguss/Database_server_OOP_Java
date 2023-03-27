@@ -44,6 +44,5 @@ public interface UserDaoInterface
 
     List<RestaurantDTO> findRestaurantsUsingFilter(Comparator<RestaurantDTO> comparator) throws SQLException;
 
-
 }
 

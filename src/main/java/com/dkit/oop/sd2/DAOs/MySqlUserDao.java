@@ -28,7 +28,6 @@ import java.util.List;
 
 public class MySqlUserDao extends MySqlDao implements UserDaoInterface
 {
-
     /*==========================METHOD TO DISPLAY ALL RESTAURANTS=========================*/
     @Override
     public List<RestaurantDTO> findAllRestaurants() throws SQLException
@@ -139,7 +138,6 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
         }
         return restaurant;     // reference to the restaurant object, or null value
     }
-
 
     /*===================METHOD TO FIND ALL MANAGER WITH SPECIFIC NAME=====================*/
     @Override

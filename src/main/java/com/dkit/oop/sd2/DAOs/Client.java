@@ -1,17 +1,17 @@
 /** CLIENT                                                  February 2021
- * 
+ *
  * This Client program asks the user to input commands to be sent to the server.
- * 
+ *
  * There are only two valid commands in the protocol: "Time" and "Echo"
- * 
+ *
  * If user types "Time" the server should reply with the current server time.
- * 
+ *
  * If the user types "Echo" followed by a message, the server will echo back the message.
  * e.g. "Echo Nice to meet you"
- * 
+ *
  * If the user enters any other input, the server will not understand, and
  * will send back a message to the effect.
- * 
+ *
  * NOte: You must run the server before running this the client.
  * (Both the server and the client will be running together on this computer)
  */
@@ -30,7 +30,6 @@ public class Client
         Client client = new Client();
         client.start();
     }
-
     public void start()
     {
         Scanner in = new Scanner(System.in);
@@ -62,8 +61,23 @@ public class Client
                 System.out.println("Client message: Response from server: \"" + input + "\"");
             }
 
-            socketWriter.close();
-            socketReader.close();
+
+
+            //===============================================
+            if(command.startsWith("Find restaurant"))   //we expect the server to return a time
+            {
+                String JsonString= socketReader.nextLine();
+                System.out.println("Client message: Response from server Time: " + JsonString);
+            }
+            else                            // the user has entered the Echo command or an invalid command
+            {
+                String input = socketReader.nextLine();
+                System.out.println("Client message: Response from server: \"" + input + "\"");
+            }
+
+
+//            socketWriter.close();
+//            socketReader.close();
             socket.close();
 
         } catch (IOException e) {
@@ -73,40 +87,5 @@ public class Client
 
 
 //  LocalTime time = LocalTime.parse(timeString); // Parse timeString -> convert to LocalTime object if required
-
-//    public void displayRestaurantById() throws IOException {
-//        Scanner input = new Scanner(System.in);
-//        System.out.print("Enter the ID of the restaurant to display: ");
-//        int id = input.nextInt();
-
-//        // create the request JSON object
-//        JSONObject request = new JSONObject();
-//        request.put("command", "getById");
-//        request.put("id", id);
-//
-//        // send the request to the server
-//        Socket socket = new Socket("localhost", 8080);
-//        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-//        out.println(request.toString());
-//
-//        // receive the response from the server
-//        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//        String response = in.readLine();
-//
-//        // parse the response JSON object
-//        JSONObject restaurantJson = new JSONObject(response);
-//        int restaurantId = restaurantJson.getInt("id");
-//        String name = restaurantJson.getString("name");
-//        String manager = restaurantJson.getString("manager");
-//        String phone = restaurantJson.getString("phone");
-//        double rating = restaurantJson.getDouble("rating");
-//
-//        // create a new RestaurantDTO object with the received data
-//        RestaurantDTO restaurant = new RestaurantDTO(restaurantId, name, manager, phone, rating);
-//
-//        // display the restaurant details
-//        System.out.println("Restaurant details:");
-//        System.out.println(restaurant.toString());
-//    }
 
 }
