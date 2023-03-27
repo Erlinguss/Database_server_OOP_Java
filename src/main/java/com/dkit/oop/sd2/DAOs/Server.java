@@ -9,7 +9,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
 public class Server {
     public static void main(String[] args) {
@@ -77,7 +76,7 @@ public class Server {
 
         @Override
         public void run() {
-            Scanner scanner = new Scanner(System.in);
+           // Scanner scanner = new Scanner(System.in);
             String message;
             try {
                 while ((message = socketReader.readLine()) != null) {
@@ -113,7 +112,7 @@ public class Server {
                     else if (message.startsWith("addRestaurant")) {
                         String[] tokens = message.split(", ");
                         if (tokens.length < 5) {
-                            socketWriter.println("Invalid format. Please enter restaurant details in the format: Name, Manager, Phone, Rating");
+                            socketWriter.println("Invalid format. Please enter restaurant details in the format: addRestaurant, Name, Manager, Phone, Rating");
                             return;
                         }
                         //addRestaurant, Taco Taco, Pablo Escobar, 544991234, 4 //example to insert in the client site
@@ -122,13 +121,7 @@ public class Server {
                         String manager = tokens[2].trim();
                         String phone = tokens[3].trim();
                         int rating = Integer.parseInt(tokens[4].trim());
-//                        int rating;
-//                        try {
-//                            rating = Integer.parseInt(tokens[4].trim());
-//                        } catch (NumberFormatException e) {
-//                            socketWriter.println("Invalid rating. Please enter an integer.");
-//                            return;
-//                        }
+
                         RestaurantDTO restaurant = new RestaurantDTO();
                         restaurant.setName(name);
                         restaurant.setManager(manager);
@@ -185,7 +178,7 @@ public class Server {
 
             JSONArray restaurantArray = new JSONArray();
 
-            // Display restaurant info
+            // Display restaurant data
             for (RestaurantDTO restaurant : restaurants) {
                 JSONObject restaurantJson = new JSONObject();
                 restaurantJson.put("id", restaurant.getId());
@@ -212,7 +205,7 @@ public class Server {
         /* ===================== METHOD TO DISPLAY RESTAURANTS BY ID AS JSON========================= */
 
         public String getRestaurantByIdAsJSON(int id) throws IOException, SQLException {
-            Scanner input = new Scanner(System.in);
+           // Scanner input = new Scanner(System.in);
 
             UserDaoInterface restDao = new MySqlUserDao();
             RestaurantDTO restaurant = restDao.findRestaurantById(id);

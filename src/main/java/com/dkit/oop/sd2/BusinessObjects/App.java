@@ -65,26 +65,6 @@ public class App
                         System.out.println(findRestaurantByIdAsJson(restDao,scanner));
                         System.out.println();
                         break;
-
-                    //      case 8:
-//    displayAllEntities();
-//                        System.out.println();
-//                        break;
-//                    case 9:
-//    displayEntityById(scanner);
-//                        System.out.println();
-//                        break;
-//                    case 10:
-//    addEntity();
-//                        System.out.println();
-//                        break;
-//                    case 11:
-//    deleteEntityById(scanner);
-//                        System.out.println();
-//                        break;
-//                    case 12:
-//                            System.out.println("Exiting...");
-//                        return;
                     case 8:
                         System.out.println("Exiting...");
                         return;
