@@ -13,25 +13,25 @@ public class App
 {
     private static Set<Integer> cache = new HashSet<>(); // Feature 6
     public static void main(String[] args) throws SQLException {
-//        UserDaoInterface restDao = new MySqlUserDao();  //"IUserDao" -> "I" stands for for
+
 
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
 
-            System.out.println("=================Menu System================");
-            System.out.println("============================================");
-            System.out.println("|        Please select an option:          |");
-            System.out.println("| 1. View all restaurants                  |");
-            System.out.println("| 2. Search for a restaurant by ID         |");
-            System.out.println("| 3. Add a new restaurant                  |");
-            System.out.println("| 4. Delete a restaurant by ID             |");
-            System.out.println("| 5. View all restaurants sorted by rating |");
-            System.out.println("| 6. Find all restaurants as JSON          |");
-            System.out.println("| 7. Find a restaurant by ID as JSON       |");
-            System.out.println("| 8. Exit                                  |");
-            System.out.println("============================================");
-            System.out.println("============================================");
+            System.out.println("╔══════════════════════════════════════╗");
+            System.out.println("║               Menu System            ║");
+            System.out.println("╠══════════════════════════════════════╣");
+            System.out.println("║        Please select an option:      ║");
+            System.out.println("║ 1. View all restaurants              ║");
+            System.out.println("║ 2. Search for a restaurant by ID     ║");
+            System.out.println("║ 3. Add a new restaurant              ║");
+            System.out.println("║ 4. Delete a restaurant by ID         ║");
+            System.out.println("║ 5. View restaurants sorted by rating ║");
+            System.out.println("║ 6. Find all restaurants as JSON      ║");
+            System.out.println("║ 7. Find a restaurant by ID as JSON   ║");
+            System.out.println("║ 8. Exit                              ║");
+            System.out.println("╚══════════════════════════════════════╝");
 
             try {
                 UserDaoInterface restDao = new MySqlUserDao();
