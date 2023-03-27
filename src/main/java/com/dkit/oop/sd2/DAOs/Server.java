@@ -1,4 +1,3 @@
-
 package com.dkit.oop.sd2.DAOs;
 
 import com.dkit.oop.sd2.DTOs.RestaurantDTO;
@@ -21,7 +20,7 @@ public class Server {
 
     public void start() {
         try {
-            ServerSocket ss = new ServerSocket(8080);  // set up ServerSocket to listen for connections on port 8080
+            ServerSocket ss = new ServerSocket(9999);  // set up ServerSocket to listen for connections on port 8080
 
             System.out.println("Server: Server started. Listening for connections on port 8080...");
 
@@ -142,7 +141,7 @@ public class Server {
             UserDaoInterface restDao = new MySqlUserDao();
             List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
 
-            if(restaurants.isEmpty()) {
+            if (restaurants.isEmpty()) {
                 System.out.println("No restaurants found in database");
                 return;
             }
@@ -158,14 +157,12 @@ public class Server {
                 restaurantJson.put("phone", restaurant.getPhone());
                 restaurantJson.put("rating", restaurant.getRating());
                 restaurantArray.put(restaurantJson);
-
             }
 
             JSONObject response = new JSONObject();
             response.put("command", "displayAllRestaurants");
             response.put("restaurants", restaurantArray);
 
-            Socket socket = new Socket("localhost", 8080);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(response.toString());
 
