@@ -46,50 +46,55 @@ public class Client
             OutputStream os = socket.getOutputStream();
             PrintWriter socketWriter = new PrintWriter(os, true);   // true => auto flush buffers
 
-            socketWriter.println(command);
+
 
             Scanner socketReader = new Scanner(socket.getInputStream());  // wait for, and retrieve the reply
 
-            if(command.startsWith("Time"))   //we expect the server to return a time
-            {
-                String timeString = socketReader.nextLine();
-                System.out.println("Client message: Response from server Time: " + timeString);
-            }
-            else                            // the user has entered the Echo command or an invalid command
-            {
-                String input = socketReader.nextLine();
-                System.out.println("Client message: Response from server: \"" + input + "\"");
-            }
-
+//            if(command.startsWith("Time"))   //we expect the server to return a time
+//            {
+//                socketWriter.println(command);
+//                String timeString = socketReader.nextLine();
+//                System.out.println("Client message: Response from server Time: " + timeString);
+//            }
+//            else                            // the user has entered the Echo command or an invalid command
+//            {
+//
+//                String input = socketReader.nextLine();
+//                System.out.println("Client message: Response from server: \"" + input + "\"");
+//            }
+//
 
 
             //===============================================
-            if(command.startsWith("Find restaurant"))   //we expect the server to return all restaurants
+            if(command.startsWith("displayAllRestaurants"))   //we expect the server to return all restaurants
             {
+                socketWriter.println(command);
                 String JsonString= socketReader.nextLine();
                 System.out.println("Client message: Response from server Time: " + JsonString);
             }
+            else  if(command.startsWith("getById"))   //we expect the server to return restaurant by id
+            {
+                System.out.println("Please enter a Restaurant id:\n>");
+                String strId = in.nextLine();
+
+                String request = command + " " + strId;
+                socketWriter.println(request);          //SEND REQUEST TO SERVER
+
+                String JsonString = socketReader.nextLine(); // WAIT FOR RESPONSE FROM SERVER
+
+                if(JsonString.equals("{}"))
+                    System.out.println( "There was no Restaurant for the id you specified");
+                else {
+                    System.out.println(JsonString);
+                }
+
+            }
             else                            // the user has entered the Echo command or an invalid command
             {
-                String input = socketReader.nextLine();
-                System.out.println("Client message: Response from server: \"" + input + "\"");
+
+                System.out.println("Invalid command");
             }
 
-            //===============================================
-            if(command.startsWith("Find restaurant by id"))   //we expect the server to return restaurant by id
-            {
-                String JsonString= socketReader.nextLine();
-                System.out.println("Client message: Response from server Time: " + JsonString);
-            }
-            else                            // the user has entered the Echo command or an invalid command
-            {
-                String input = socketReader.nextLine();
-                System.out.println("Client message: Response from server: \"" + input + "\"");
-            }
-
-
-//            socketWriter.close();
-//            socketReader.close();
             socket.close();
 
         } catch (IOException e) {

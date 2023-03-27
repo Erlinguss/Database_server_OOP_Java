@@ -2,6 +2,7 @@
 package com.dkit.oop.sd2.DAOs;
 
 import com.dkit.oop.sd2.DTOs.RestaurantDTO;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -111,13 +112,14 @@ public class Server {
 //                    }
 
                     //====================================working perfectly====================
-                    else if (message.startsWith("Find restaurant")) {
+                    else if (message.startsWith("displayAllRestaurants")) {
                         try {
-                            List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
-                            System.out.println(restaurants);
+                            System.out.println();
+//                            List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
+//                            System.out.println(restaurants);
                             //Gson gson = new Gson();
-                            //displayRestaurantById();
-                            socketWriter.println(restaurants);
+                            displayAllRestaurants();
+//                            socketWriter.println(restaurants);
 
                         } catch (SQLException exception) {
                             throw new RuntimeException(exception);
@@ -125,11 +127,18 @@ public class Server {
                     }
 
                     /* ========================== TO DISPLAY RESTAURANTS BY ID========================= */
-                    else if (message.startsWith("Find restaurant by id")) {
-                        int id = 0;
-                        // = Integer.parseInt(message.substring(22));
-                        displayRestaurantById( id);
+                    else if (message.startsWith("getById")) {
 
+                        String tokens[] = message.split(" ");  // default delimiter is a space
+
+                        // = Integer.parseInt(message.substring(22));
+
+                        int id =  Integer.parseInt( tokens[1] );
+                        System.out.println("In run() command=" + tokens[0] + ", id from client =" + tokens[1]);
+                        String response = getRestaurantByIdAsJSON(id);
+
+
+                        socketWriter.println(response); // send message to client
 
                     } else {
                         socketWriter.println("I'm sorry I don't understand :(");
@@ -149,49 +158,75 @@ public class Server {
                 System.out.println("Server: (ClientHandler): Exception: " + e);
             }
         }
-
-
-        public void displayRestaurantById(int id) throws IOException, SQLException {
-            Scanner input = new Scanner(System.in);
-           System.out.print("Enter the ID of the restaurant to display: ");
-            id = input.nextInt();
-
+        public void displayAllRestaurants() throws IOException, SQLException {
             UserDaoInterface restDao = new MySqlUserDao();
-            List<RestaurantDTO> restaurants = (List<RestaurantDTO>) restDao.findRestaurantById(id);
+            List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
 
             if(restaurants.isEmpty()) {
-                System.out.println("No restaurant found with ID: " + id);
+                System.out.println("No restaurants found in database");
                 return;
             }
 
-            RestaurantDTO restaurant = restaurants.get(0);
+            JSONArray restaurantArray = new JSONArray();
 
-            JSONObject request = new JSONObject();
-            request.put("command", "getById");
-            request.put("id", id);
+            // Display restaurant info
+            for (RestaurantDTO restaurant : restaurants) {
+                JSONObject restaurantJson = new JSONObject();
+                restaurantJson.put("id", restaurant.getId());
+                restaurantJson.put("name", restaurant.getName());
+                restaurantJson.put("manager", restaurant.getManager());
+                restaurantJson.put("phone", restaurant.getPhone());
+                restaurantJson.put("rating", restaurant.getRating());
+                restaurantArray.put(restaurantJson);
+
+            }
+
+            JSONObject response = new JSONObject();
+            response.put("command", "displayAllRestaurants");
+            response.put("restaurants", restaurantArray);
 
             Socket socket = new Socket("localhost", 8080);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            out.println(request.toString());
+            out.println(response.toString());
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String response = in.readLine();
+            String responseMsg = in.readLine();
 
-            JSONObject restaurantJson = new JSONObject(response);
-            int restaurantId = restaurantJson.getInt("id");
-            String name = restaurantJson.getString("name");
-            String manager = restaurantJson.getString("manager");
-            String phone = restaurantJson.getString("phone");
-            double rating = restaurantJson.getDouble("rating");
+            System.out.println(responseMsg);
+        }
 
-           restaurant.setId(restaurantId);
-            restaurant.setName(name);
-            restaurant.setManager(manager);
-            restaurant.setPhone(phone);
-            restaurant.setRating(rating);
 
-            System.out.println("Restaurant details:");
-            System.out.println(restaurant.toString());
+        public String getRestaurantByIdAsJSON(int id) throws IOException, SQLException {
+            Scanner input = new Scanner(System.in);
+
+
+            UserDaoInterface restDao = new MySqlUserDao();
+            RestaurantDTO restaurant = restDao.findRestaurantById(id);
+
+            String response = null;
+
+            if (restaurant == null) {
+                System.out.println("No restaurant found with ID: " + id + ", so, return a JSon String wit empty object");
+                response = "{}"; // empty object
+            } else {
+
+
+
+                JSONObject restaurantJsonObject = new JSONObject();
+                restaurantJsonObject.put("id",restaurant.getId() );
+                restaurantJsonObject.put("name",restaurant.getName() );
+                restaurantJsonObject.put("manager",restaurant.getManager() );
+                restaurantJsonObject.put("phone",restaurant.getPhone() );
+                restaurantJsonObject.put("rating",restaurant.getRating() );
+
+
+                response = restaurantJsonObject.toString();
+
+//                System.out.println("Restaurant details:");
+//                System.out.println(restaurant.toString());
+            }
+
+            return response;  // which is JSON String format
         }
 
     }
