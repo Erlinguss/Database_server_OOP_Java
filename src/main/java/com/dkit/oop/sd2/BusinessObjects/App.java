@@ -1,6 +1,6 @@
 package com.dkit.oop.sd2.BusinessObjects;
 
-import com.dkit.oop.sd2.DAOs.MySqlUserDao;
+import com.dkit.oop.sd2.DAOs.MySqlRestaurantDao;
 import com.dkit.oop.sd2.DAOs.UserDaoInterface;
 import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
@@ -34,7 +34,7 @@ public class App
             System.out.println("╚══════════════════════════════════════╝");
 
             try {
-                UserDaoInterface restDao = new MySqlUserDao();
+                UserDaoInterface restDao = new MySqlRestaurantDao();
                 int choice = scanner.nextInt();
                 switch (choice) {
                     case 1:

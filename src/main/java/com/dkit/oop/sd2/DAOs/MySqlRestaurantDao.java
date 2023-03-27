@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class MySqlUserDao extends MySqlDao implements UserDaoInterface
+public class MySqlRestaurantDao extends MySqlDao implements UserDaoInterface
 {
     /*==========================METHOD TO DISPLAY ALL RESTAURANTS=========================*/
     @Override
@@ -211,7 +211,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
     }
 
     /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
-    @Override
+
 //    public boolean deleteRestaurantById(int id)  throws DaoException {
 //
 //
@@ -229,6 +229,7 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
 //        }
 //        return false;
 
+    @Override
     public boolean deleteRestaurantById(int id) throws DaoException {
         String sql = "DELETE FROM restaurant WHERE id=?";
 

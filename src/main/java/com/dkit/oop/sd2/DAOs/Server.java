@@ -57,7 +57,7 @@ public class Server {
 
         public ClientHandler(Socket clientSocket, int clientNumber) {
             try {
-                restDao = new MySqlUserDao();
+                restDao = new MySqlRestaurantDao();
 
                 InputStreamReader isReader = new InputStreamReader(clientSocket.getInputStream());
                 this.socketReader = new BufferedReader(isReader);
@@ -171,7 +171,7 @@ public class Server {
 
         /* ============================METHOD TO DISPLAY ALL RESTAURANTS AS JSON========================= */
         public void displayAllRestaurantsAsJson() throws IOException, SQLException {
-            UserDaoInterface restDao = new MySqlUserDao();
+            UserDaoInterface restDao = new MySqlRestaurantDao();
             List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
 
             if (restaurants.isEmpty()) {
@@ -205,7 +205,7 @@ public class Server {
 
         public String getRestaurantByIdAsJSON(int id) throws IOException, SQLException {
 
-            UserDaoInterface restDao = new MySqlUserDao();
+            UserDaoInterface restDao = new MySqlRestaurantDao();
             RestaurantDTO restaurant = restDao.findRestaurantById(id);
 
             String response = null;
@@ -233,7 +233,7 @@ public class Server {
         /* ============================METHOD TO ADD A RESTAURANT AS JSON ============================ */
         public String addRestaurantAsJson(RestaurantDTO restaurantDTO) throws IOException, SQLException {
 
-            UserDaoInterface restDao = new MySqlUserDao();
+            UserDaoInterface restDao = new MySqlRestaurantDao();
             RestaurantDTO restaurants = restDao.insertRestaurant(restaurantDTO);
             JSONObject restaurantJsonObject = new JSONObject();
             restaurantJsonObject.put("id", restaurants.getId());
@@ -248,7 +248,7 @@ public class Server {
         /* ============================ DELETE A RESTAURANT BY ID AS JSON============================ */
         public String DeleteRestaurantAsJson(int id) throws IOException, SQLException {
 
-            UserDaoInterface restDao = new MySqlUserDao();
+            UserDaoInterface restDao = new MySqlRestaurantDao();
             JSONObject restaurantJsonObject = new JSONObject();
             String response;
             System.out.println();
