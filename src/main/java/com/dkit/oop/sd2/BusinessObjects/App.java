@@ -18,58 +18,88 @@ public class App
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("===============Menu System===============");
-            System.out.println("=========================================");
-            System.out.println("Please select an option:");
-            System.out.println("1. View all restaurants");
-            System.out.println("2. Search for a restaurant by ID");
-            System.out.println("3. Add a new restaurant");
-            System.out.println("4. Delete a restaurant by ID");
-            System.out.println("5. View all restaurants sorted by rating");
-            System.out.println("6. Find all restaurants as JSON");
-            System.out.println("7. Find a restaurant by ID as JSON");
-            System.out.println("8. Exit");
-            System.out.println("=========================================");
-            System.out.println("=========================================");
-            int choice = scanner.nextInt();
-            switch (choice) {
-                case 1:
-                    viewAllRestaurants();
-                    break;
-                case 2:
-                    searchRestaurantById(scanner);
-                    break;
-                case 3:
-                    addNewRestaurant(scanner);
-                    break;
-                case 4:
-                    deleteRestaurantById(scanner);
-                    break;
-                case 5:
-                    viewRestaurantsSortedByRating();
-                    break;
-//                case 6:
-//                    findAllRestaurantsAsJson();
-//                    break;
-//                case 7:
-//                    findRestaurantByIdAsJson(scanner);
-//                    break;
-                case 6:
-                    System.out.println(findAllRestaurantsAsJson());
-                    break;
-                case 7:
-                    System.out.println(findRestaurantByIdAsJson(scanner));
-                    break;
-                case 8:
-                    System.out.println("Exiting...");
-                    return;
-                default:
-                    System.out.println("Invalid choice, please try again.");
-                    break;
+            System.out.println("=================Menu System================");
+            System.out.println("============================================");
+            System.out.println("|        Please select an option:          |");
+            System.out.println("| 1. View all restaurants                  |");
+            System.out.println("| 2. Search for a restaurant by ID         |");
+            System.out.println("| 3. Add a new restaurant                  |");
+            System.out.println("| 4. Delete a restaurant by ID             |");
+            System.out.println("| 5. View all restaurants sorted by rating |");
+            System.out.println("| 6. Find all restaurants as JSON          |");
+            System.out.println("| 7. Find a restaurant by ID as JSON       |");
+            System.out.println("| 8. Exit                                  |");
+            System.out.println("============================================");
+            System.out.println("============================================");
+            try {
+                int choice = scanner.nextInt();
+                switch (choice) {
+                    case 1:
+                        viewAllRestaurants();
+                        System.out.println();
+                        break;
+                    case 2:
+                        searchRestaurantById(scanner);
+                        System.out.println();
+                        break;
+                    case 3:
+                        addNewRestaurant(scanner);
+                        System.out.println();
+                        break;
+                    case 4:
+                        deleteRestaurantById(scanner);
+                        System.out.println();
+                        break;
+                    case 5:
+                        viewRestaurantsSortedByRating();
+                        System.out.println();
+                        break;
+                    case 6:
+                        System.out.println(findAllRestaurantsAsJson());
+                        System.out.println();
+                        break;
+                    case 7:
+                        System.out.println(findRestaurantByIdAsJson(scanner));
+                        System.out.println();
+                        break;
+                    case 8:
+                        System.out.println("Exiting...");
+                        return;
+                    default:
+                        System.out.println("Invalid choice, please try again.");
+                        System.out.println();
+                        break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input, please enter a number.");
+                System.out.println();
+                scanner.next();
             }
         }
     }
 
+
+//      case 8:
+//    displayAllEntities();
+//                        System.out.println();
+//                        break;
+//                    case 9:
+//    displayEntityById(scanner);
+//                        System.out.println();
+//                        break;
+//                    case 10:
+//    addEntity();
+//                        System.out.println();
+//                        break;
+//                    case 11:
+//    deleteEntityById(scanner);
+//                        System.out.println();
+//                        break;
+//                    case 12:
+//                            System.out.println("Exiting...");
+//                        return;
+
+    /*==========================METHOD TO DISPLAY ALL RESTAURANTS=========================*/
     private static void viewAllRestaurants() throws SQLException {
         UserDaoInterface restDao = new MySqlUserDao();
         List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
@@ -78,6 +108,7 @@ public class App
         }
     }
 
+    /*=======================METHOD TO SEARCH RESTAURANTS BY ID =========================*/
     private static void searchRestaurantById(Scanner scanner) throws SQLException {
         UserDaoInterface restDao = new MySqlUserDao();
         System.out.print("Enter restaurant ID: ");
@@ -90,7 +121,7 @@ public class App
         }
     }
 
-
+    /*===========================METHOD TO ADD A NEW RESTAURANT=========================*/
     private static void addNewRestaurant(Scanner scanner) throws SQLException {
         UserDaoInterface restDao = new MySqlUserDao();
         System.out.print("Enter restaurant name: ");
@@ -106,6 +137,7 @@ public class App
         System.out.println("New restaurant was added successfully");
     }
 
+    /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
     private static void deleteRestaurantById(Scanner scanner) throws SQLException {
         UserDaoInterface restDao = new MySqlUserDao();
         System.out.print("Enter restaurant ID: ");
@@ -114,6 +146,7 @@ public class App
         System.out.println("Restaurant deleted successfully.");
     }
 
+    /*=================METHOD TO SORT ALL RESTAURANTS BY RATING ========================*/
     private static void viewRestaurantsSortedByRating() throws SQLException {
         UserDaoInterface restDao = new MySqlUserDao();
         List<RestaurantDTO> restaurants = restDao.findRestaurantsUsingFilter(Comparator.comparingDouble(RestaurantDTO::getRating).reversed());
@@ -122,11 +155,12 @@ public class App
         }
     }
 
+    /*============METHOD TO DISPLAY ALL RESTAURANTS AS JSON FORMAT ====================*/
     public static String findAllRestaurantsAsJson() throws SQLException {
         UserDaoInterface restDao = new MySqlUserDao();
         List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
-        //Gson gson = new Gson();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        //Gson gson = new Gson(); Displaying the Json data in line
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();// Displaying the data en Json format
 
         try {
             return gson.toJson(restaurants);
@@ -135,14 +169,15 @@ public class App
         }
     }
 
+    /*========METHOD TO FIND A RESTAURANT BY ID AND DISPLAYED AS JSON FORMAT==========*/
     public static String findRestaurantByIdAsJson(Scanner scanner) throws SQLException {
         UserDaoInterface restDao = new MySqlUserDao();
         System.out.print("Enter restaurant ID: ");
         int id = scanner.nextInt();
         RestaurantDTO restaurant = restDao.findRestaurantById(id);
         if (restaurant != null) {
-           // Gson gson = new Gson();
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+           // Gson gson = new Gson(); Displaying the Json data in line
+            Gson gson = new GsonBuilder().setPrettyPrinting().create(); // Displaying the data en Json format
             try {
                 return gson.toJson(restaurant);
             } catch (Exception e) {
@@ -152,14 +187,6 @@ public class App
             return "Restaurant not found.";
         }
     }
-
-
-
-
-
-
-
-
 
 
 }
