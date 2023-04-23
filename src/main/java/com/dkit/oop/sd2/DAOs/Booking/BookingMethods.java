@@ -75,7 +75,7 @@ public class BookingMethods {
     }
 
     /*=================METHOD TO SORT ALL BOOKING BY RATING ========================*/
-    public static void viewBookingSortedByRating(BookingDaoInterface bookingDao) throws SQLException {
+    public static void viewBookingSortedByDate(BookingDaoInterface bookingDao) throws SQLException {
 
         List<BookingDTO> bookings = bookingDao.findBookingsUsingFilter((Comparator.comparing(BookingDTO::getBooking_date).reversed()));
         for (BookingDTO booking : bookings) {

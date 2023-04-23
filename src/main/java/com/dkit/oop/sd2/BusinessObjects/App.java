@@ -272,7 +272,7 @@ public class App {
                         break;
 
                     case View_booking_sorted_by_date:
-                        BookingMethods.viewBookingSortedByRating(BookingDao);
+                        BookingMethods.viewBookingSortedByDate(BookingDao);
                          System.out.println();
                         break;
 

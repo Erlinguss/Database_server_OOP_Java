@@ -214,64 +214,6 @@ public class MySqlRestaurantDao extends MySqlDao implements RestaurantDaoInterfa
         return null;
     }
 
-    /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
-//    @Override
-//    public boolean deleteRestaurantById(int id) throws DaoException {
-//        String sql = "DELETE FROM restaurant WHERE id=?";
-//
-//        try (Connection connection = this.getConnection();
-//             PreparedStatement statement = connection.prepareStatement(sql)) {
-//
-//            statement.setInt(1, id);
-//
-//            int rowsAffected = statement.executeUpdate();
-//
-//            if (rowsAffected > 0) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//
-//        } catch (SQLException e) {
-//            throw new DaoException("Error deleting restaurant by id: " + e.getMessage());
-//        }
-//    }
-
-    /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
-//    @Override
-//    public boolean deleteRestaurantById(int id) throws DaoException {
-//        String deleteBookingsSql = "DELETE FROM booking WHERE restaurant_id=?";
-//        String deleteRestaurantSql = "DELETE FROM restaurant WHERE id=?";
-//
-//        try (Connection connection = this.getConnection();
-//             PreparedStatement deleteBookingsStatement = connection.prepareStatement(deleteBookingsSql);
-//             PreparedStatement deleteRestaurantStatement = connection.prepareStatement(deleteRestaurantSql)) {
-//
-//            connection.setAutoCommit(false);
-//
-//            // Delete bookings for the restaurant
-//            deleteBookingsStatement.setInt(1, id);
-//            int bookingsRowsAffected = deleteBookingsStatement.executeUpdate();
-//
-//            // Delete the restaurant
-//            deleteRestaurantStatement.setInt(1, id);
-//            int restaurantRowsAffected = deleteRestaurantStatement.executeUpdate();
-//
-//            if (bookingsRowsAffected > 0 && restaurantRowsAffected > 0) {
-//                connection.commit();
-//                return true;
-//            } else {
-//
-//                connection.rollback(); // Rollback the transaction if either deletion failed
-//                return false;
-//            }
-//
-//        } catch (SQLException e) {
-//            throw new DaoException("Error deleting restaurant by id: " + e.getMessage());
-//        }
-//    }
-
-
     @Override
     public boolean deleteRestaurantById(int id) throws DaoException {
         String checkBookingsSql = "SELECT COUNT(*) FROM booking WHERE restaurant_id=?";
