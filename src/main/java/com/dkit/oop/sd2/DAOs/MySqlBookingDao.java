@@ -1,15 +1,19 @@
 package com.dkit.oop.sd2.DAOs;
 
 import com.dkit.oop.sd2.DTOs.BookingDTO;
-import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class MySqlBookingDao extends MySqlDao implements UserDaoInterface{
+
+public class MySqlBookingDao extends MySqlDao implements BookingDaoInterface {
 
 
     @Override
@@ -181,40 +185,40 @@ public class MySqlBookingDao extends MySqlDao implements UserDaoInterface{
 
 
     //RESTAURANT METHODS
-
-    @Override
-    public List<RestaurantDTO> findAllRestaurants() throws SQLException {
-        return null;
-    }
-
-    @Override
-    public RestaurantDTO findRestaurantById(int id) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public RestaurantDTO updatePhone(String name, int phone) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public boolean deleteRestaurantById(int id) throws SQLException {
-        return false;
-    }
-
-    @Override
-    public List<RestaurantDTO> findAllManagerContains(String subString) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public RestaurantDTO insertRestaurant(RestaurantDTO restaurantDTO) throws SQLException {
-        return null;
-    }
-    @Override
-    public List<RestaurantDTO> findRestaurantsUsingFilter(Comparator<RestaurantDTO> comparator) throws SQLException {
-        return null;
-    }
+//
+//    @Override
+//    public List<RestaurantDTO> findAllRestaurants() throws SQLException {
+//        return null;
+//    }
+//
+//    @Override
+//    public RestaurantDTO findRestaurantById(int id) throws SQLException {
+//        return null;
+//    }
+//
+//    @Override
+//    public RestaurantDTO updatePhone(String name, int phone) throws DaoException {
+//        return null;
+//    }
+//
+//    @Override
+//    public boolean deleteRestaurantById(int id) throws SQLException {
+//        return false;
+//    }
+//
+//    @Override
+//    public List<RestaurantDTO> findAllManagerContains(String subString) throws DaoException {
+//        return null;
+//    }
+//
+//    @Override
+//    public RestaurantDTO insertRestaurant(RestaurantDTO restaurantDTO) throws SQLException {
+//        return null;
+//    }
+//    @Override
+//    public List<RestaurantDTO> findRestaurantsUsingFilter(Comparator<RestaurantDTO> comparator) throws SQLException {
+//        return null;
+//    }
 
 
 }

@@ -2,7 +2,8 @@ package com.dkit.oop.sd2.BusinessObjects;
 
 import com.dkit.oop.sd2.DAOs.MySqlBookingDao;
 import com.dkit.oop.sd2.DAOs.MySqlRestaurantDao;
-import com.dkit.oop.sd2.DAOs.UserDaoInterface;
+import com.dkit.oop.sd2.DAOs.RestaurantDaoInterface;
+import com.dkit.oop.sd2.DAOs.BookingDaoInterface;
 import com.dkit.oop.sd2.DTOs.BookingDTO;
 import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
@@ -87,7 +88,7 @@ public class App {
 
     private void displayRestaurantMenu() {
 
-        UserDaoInterface restDao = new MySqlRestaurantDao();
+        RestaurantDaoInterface restDao = new MySqlRestaurantDao();
 
         final String MenuRestaurant =
 
@@ -183,7 +184,7 @@ public class App {
 
     private void displayBookingMenu() {
 
-        UserDaoInterface BookingDao = new MySqlBookingDao();
+        BookingDaoInterface BookingDao = new MySqlBookingDao();
 
         final String MenuBooking =
 
@@ -281,7 +282,7 @@ public class App {
 
 
     /*==========================METHOD TO DISPLAY ALL RESTAURANTS=========================*/
-    public static void viewAllRestaurants(UserDaoInterface restDao) throws SQLException {
+    public static void viewAllRestaurants(RestaurantDaoInterface restDao) throws SQLException {
 
         List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
         for (RestaurantDTO restaurant : restaurants) {
@@ -290,7 +291,7 @@ public class App {
     }
 
     /*=======================METHOD TO SEARCH RESTAURANTS BY ID =========================*/
-    public static void searchRestaurantById(UserDaoInterface restDao, Scanner scanner) throws SQLException {
+    public static void searchRestaurantById(RestaurantDaoInterface restDao, Scanner scanner) throws SQLException {
 
         System.out.print("Enter restaurant ID: ");
         int id = scanner.nextInt();
@@ -303,7 +304,7 @@ public class App {
     }
 
     /*===========================METHOD TO ADD A NEW RESTAURANT=========================*/
-    public static void addNewRestaurant(UserDaoInterface restDao, Scanner scanner) throws SQLException {
+    public static void addNewRestaurant(RestaurantDaoInterface restDao, Scanner scanner) throws SQLException {
 
         System.out.print("Enter restaurant name: ");
         String name = scanner.next();
@@ -319,7 +320,7 @@ public class App {
     }
 
     /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
-    public static void deleteRestaurantById(UserDaoInterface restDao, Scanner scanner) throws SQLException {
+    public static void deleteRestaurantById(RestaurantDaoInterface restDao, Scanner scanner) throws SQLException {
 
         System.out.print("Enter restaurant ID: ");
         int id = scanner.nextInt();
@@ -333,7 +334,7 @@ public class App {
 
 
     /*=================METHOD TO SORT ALL RESTAURANTS BY RATING ========================*/
-    public static void viewRestaurantsSortedByRating(UserDaoInterface restDao) throws SQLException {
+    public static void viewRestaurantsSortedByRating(RestaurantDaoInterface restDao) throws SQLException {
 
         List<RestaurantDTO> restaurants = restDao.findRestaurantsUsingFilter(Comparator.comparingDouble(RestaurantDTO::getRating).reversed());
         for (RestaurantDTO restaurant : restaurants) {
@@ -342,7 +343,7 @@ public class App {
     }
 
     /*============METHOD TO DISPLAY ALL RESTAURANTS AS JSON FORMAT ====================*/
-    public static String findAllRestaurantsAsJson(UserDaoInterface restDao) throws SQLException {
+    public static String findAllRestaurantsAsJson(RestaurantDaoInterface restDao) throws SQLException {
 
         List<RestaurantDTO> restaurants = restDao.findAllRestaurants();
         //Gson gson = new Gson(); Displaying the Json data in line
@@ -356,7 +357,7 @@ public class App {
     }
 
     /*========METHOD TO FIND A RESTAURANT BY ID AND DISPLAYED AS JSON FORMAT==========*/
-    public static String findRestaurantByIdAsJson(UserDaoInterface restDao, Scanner scanner) throws SQLException {
+    public static String findRestaurantByIdAsJson(RestaurantDaoInterface restDao, Scanner scanner) throws SQLException {
 
         System.out.print("Enter restaurant ID: ");
         int id = scanner.nextInt();
@@ -382,7 +383,7 @@ public class App {
     //=========================================================================================
 
     /*==============METHOD TO DISPLAY ALL BOOKING DETAILS AD IN WHICH RESTAURANT===============*/
-    public static void findAllBookingsWithRestaurantNames(UserDaoInterface BookingDao) throws SQLException {
+    public static void findAllBookingsWithRestaurantNames(BookingDaoInterface BookingDao) throws SQLException {
 
         List<BookingDTO> bookings = BookingDao.findAllBookingsWithRestaurantNames();
         for (BookingDTO booking : bookings) {
@@ -391,7 +392,7 @@ public class App {
     }
 
     /*=======================METHOD TO SEARCH RESTAURANTS BY ID =========================*/
-    public static void searchBookingById(UserDaoInterface BookingDao, Scanner scanner) throws SQLException {
+    public static void searchBookingById(BookingDaoInterface BookingDao, Scanner scanner) throws SQLException {
 
         System.out.print("Enter booking ID: ");
         int id = scanner.nextInt();
@@ -405,7 +406,7 @@ public class App {
 
     /*===========================METHOD TO ADD A NEW BOOKING=========================*/
 
-    public static void addNewBooking(UserDaoInterface bookingDao, Scanner scanner) throws SQLException {
+    public static void addNewBooking(BookingDaoInterface bookingDao, Scanner scanner) throws SQLException {
         System.out.print("Enter restaurant id: ");
         int restaurant_id = scanner.nextInt();
 
@@ -431,7 +432,7 @@ public class App {
     }
 
     /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
-    public static void deleteBookingById(UserDaoInterface bookingDao, Scanner scanner) throws SQLException {
+    public static void deleteBookingById(BookingDaoInterface bookingDao, Scanner scanner) throws SQLException {
 
         System.out.print("Enter restaurant ID: ");
         int id = scanner.nextInt();
@@ -444,7 +445,7 @@ public class App {
     }
 
     /*=================METHOD TO SORT ALL BOOKING BY RATING ========================*/
-    public static void viewBookingSortedByRating(UserDaoInterface bookingDao) throws SQLException {
+    public static void viewBookingSortedByRating(BookingDaoInterface bookingDao) throws SQLException {
 
         List<BookingDTO> bookings = bookingDao.findBookingsUsingFilter((Comparator.comparing(BookingDTO::getBooking_date).reversed()));
         for (BookingDTO booking : bookings) {
@@ -453,7 +454,7 @@ public class App {
     }
 
     /*============METHOD TO DISPLAY ALL BOOKING AS JSON FORMAT ====================*/
-    public static String findAllBookingsAsJson(UserDaoInterface bookingDao) throws SQLException {
+    public static String findAllBookingsAsJson(BookingDaoInterface bookingDao) throws SQLException {
 
         List<BookingDTO> bookings = bookingDao.findAllBookingsWithRestaurantNames();
         //Gson gson = new Gson(); Displaying the Json data in line
@@ -467,7 +468,7 @@ public class App {
     }
 
     /*========METHOD TO FIND A BOOKING BY ID AND DISPLAYED AS JSON FORMAT==========*/
-    public static String findBookingByIdAsJson(UserDaoInterface bookingDao, Scanner scanner) throws SQLException {
+    public static String findBookingByIdAsJson(BookingDaoInterface bookingDao, Scanner scanner) throws SQLException {
 
         System.out.print("Enter booking by ID: ");
         int id = scanner.nextInt();
@@ -486,104 +487,4 @@ public class App {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-//        while (true) {
-//
-//            System.out.println("╔══════════════════════════════════════╗");
-//            System.out.println("║               Menu System            ║");
-//            System.out.println("╠══════════════════════════════════════╣");
-//            System.out.println("║        Please select an option:      ║");
-//            System.out.println("║ 1. View all restaurants              ║");
-//            System.out.println("║ 2. Search for a restaurant by ID     ║");
-//            System.out.println("║ 3. Add a new restaurant              ║");
-//            System.out.println("║ 4. Delete a restaurant by ID         ║");
-//            System.out.println("║ 5. View restaurants sorted by rating ║");
-//            System.out.println("║ 6. Find all restaurants as JSON      ║");
-//            System.out.println("║ 7. Find a restaurant by ID as JSON   ║");
-//            System.out.println("║ 8. Exit                              ║");
-//            System.out.println("╚══════════════════════════════════════╝");
-//
-//            try {
-//                UserDaoInterface restDao = new MySqlRestaurantDao();
-//                UserDaoInterface BookingDao = new MySqlBookingDao();
-//                int choice = scanner.nextInt();
-//                switch (choice) {
-//                    case 1:
-//                        viewAllRestaurants(restDao);
-//                        System.out.println();
-//                        break;
-//                    case 2:
-//                        searchRestaurantById(restDao, scanner);
-//                        System.out.println();
-//                        break;
-//                    case 3:
-//                        addNewRestaurant(restDao,scanner);
-//                        System.out.println();
-//                        break;
-//                    case 4:
-//                        deleteRestaurantById(restDao,scanner);
-//                        System.out.println();
-//                        break;
-//                    case 5:
-//                        viewRestaurantsSortedByRating(restDao);
-//                        System.out.println();
-//                        break;
-//                    case 6:
-//                        System.out.println(findAllRestaurantsAsJson(restDao));
-//                        System.out.println();
-//                        break;
-//                    case 7:
-//                        System.out.println(findRestaurantByIdAsJson(restDao,scanner));
-//                        System.out.println();
-//                        break;
-//                    case 8:
-//                        findAllBookingsWithRestaurantNames( BookingDao );
-//                        //System.out.println("Exiting...");
-//                       break;
-//
-//                    case 9:
-//                        System.out.println("Exiting...");
-//                        return;
-//                    default:
-//                        System.out.println("Invalid choice, please try again.");
-//                        System.out.println();
-//                        break;
-//                }
-//            } catch (InputMismatchException e) {
-//                System.out.println("Invalid input, please enter a number.");
-//                System.out.println();
-//                scanner.next();
-//            }
-//        }
-//    }
-//

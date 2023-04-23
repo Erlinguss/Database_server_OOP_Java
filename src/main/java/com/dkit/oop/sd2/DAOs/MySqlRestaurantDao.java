@@ -16,9 +16,9 @@ package com.dkit.oop.sd2.DAOs;
  */
 
 
-import com.dkit.oop.sd2.DTOs.BookingDTO;
 import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class MySqlRestaurantDao extends MySqlDao implements UserDaoInterface
+public class MySqlRestaurantDao extends MySqlDao implements RestaurantDaoInterface
 {
 
 
@@ -265,15 +265,30 @@ public class MySqlRestaurantDao extends MySqlDao implements UserDaoInterface
 
 
     //BOOKING METHODS
-    @Override
-    public List<BookingDTO> findAllBookingsWithRestaurantNames() throws SQLException {
-        return null;
-    }
-
-    @Override
-    public BookingDTO findBookingId(int id) throws SQLException {
-        return null;
-    }
+//    @Override
+//    public List<BookingDTO> findAllBookingsWithRestaurantNames() throws SQLException {
+//        return null;
+//    }
+//
+//    @Override
+//    public BookingDTO findBookingId(int id) throws SQLException {
+//        return null;
+//    }
+//
+//    @Override
+//    public BookingDTO insertBooking(BookingDTO bookingDTO) throws DaoException {
+//        return null;
+//    }
+//
+//    @Override
+//    public boolean deleteBookingById(int id) throws SQLException {
+//        return false;
+//    }
+//
+//    @Override
+//    public List<BookingDTO> findBookingsUsingFilter(Comparator<BookingDTO> comparator) throws SQLException {
+//        return null;
+//    }
 
     @Override
     public BookingDTO insertBooking(BookingDTO bookingDTO) throws DaoException {
