@@ -28,7 +28,7 @@ public class BookingMethodsTest {
     @Test
     public void testSearchBookingById() throws SQLException {
         System.out.println("testSearchBookingById");
-        int id = 2;
+        int id = 4;
         BookingDTO booking = bookingDao.findBookingId(id);
         assertNotNull(booking);
     }
@@ -46,8 +46,8 @@ public class BookingMethodsTest {
     @Test
     public void testUpdateBookingDate() throws SQLException {
         System.out.println("testUpdateBookingDate");
-        bookingDao.updateBookingDate(2, "2023-05-01");
-        BookingDTO booking = bookingDao.findBookingId(2);
+        bookingDao.updateBookingDate(5, "2023-05-01");
+        BookingDTO booking = bookingDao.findBookingId(5);
         assertEquals("2023-05-01", booking.getBooking_date());
     }
 

@@ -141,7 +141,7 @@ public class Server {
                         String response1 = addRestaurantAsJson(restaurant);
 
                         // send message to client
-                       socketWriter.println(response1 );
+                        socketWriter.println(response1);
 
 
                     }
@@ -163,7 +163,7 @@ public class Server {
                     }
 
                     /* ======================== DISPLAY ALL BOOKING ============================= */
-                   else if (message.startsWith("displayAllBookings")) {
+                    else if (message.startsWith("displayAllBookings")) {
                         try {
                             System.out.println();
 
@@ -172,15 +172,13 @@ public class Server {
                         } catch (SQLException exception) {
                             throw new RuntimeException(exception);
                         }
-                    }
-
-                    else if (message.startsWith("getBookingById")) {
+                    } else if (message.startsWith("getBookingById")) {
 
                         String tokens[] = message.split(" ");  // default delimiter is a space
 
                         int id = Integer.parseInt(tokens[1]);
                         System.out.println("In run() command=" + tokens[0] + ", id from client =" + tokens[1]);
-                        String response1 =  getBookingByIdAsJSON(id);
+                        String response1 = getBookingByIdAsJSON(id);
 
                         socketWriter.println(response1); // send message to client
                     }
@@ -214,9 +212,7 @@ public class Server {
                         // send message to client
                         socketWriter.println(response);
 
-                    }
-
-                    else if (message.startsWith("deleteBooking")) {
+                    } else if (message.startsWith("deleteBooking")) {
 
                         try {
                             System.out.println();
@@ -229,9 +225,7 @@ public class Server {
                             throw new RuntimeException(exception);
                         }
 
-                    }
-
-                    else {
+                    } else {
                         socketWriter.println("I'm sorry I don't understand :(");
                     }
 
@@ -276,7 +270,7 @@ public class Server {
             response.put("command", "displayAllRestaurants");
             response.put("restaurants", restaurantArray);
 
-             this.socketWriter.println(response.toString());
+            this.socketWriter.println(response.toString());
 
         }
 
@@ -345,7 +339,7 @@ public class Server {
 
         /* ============================METHOD TO DISPLAY ALL BOOKING AS JSON========================= */
         public void displayAllBookingsAsJson() throws IOException, SQLException {
-           BookingDaoInterface bookingDao = new MySqlBookingDao();
+            BookingDaoInterface bookingDao = new MySqlBookingDao();
             List<BookingDTO> booking = bookingDao.findAllBookingsWithRestaurantNames();
 
             if (booking.isEmpty()) {
@@ -365,12 +359,12 @@ public class Server {
                 bookingJson.put("booking_date", bookings.getBooking_date());
                 bookingJson.put("booking_time", bookings.getBooking_time());
                 bookingJson.put("num_guests", bookings.getNum_guests());
-                bookingArray .put(bookingJson);
+                bookingArray.put(bookingJson);
             }
 
             JSONObject response = new JSONObject();
             response.put("command", "displayAllBookings");
-            response.put("bookings",  bookingArray );
+            response.put("bookings", bookingArray);
 
             this.socketWriter.println(response.toString());
 

@@ -29,7 +29,7 @@ public class RestaurantMethodsTest
     @Test
     public void TestSearchRestaurantById() throws SQLException {
         System.out.println("testSearchBookingById");
-        int id = 2;
+        int id = 4;
         RestaurantDTO restaurant = restDao.findRestaurantById(id);
         assertNotNull(restaurant);
     }
@@ -53,7 +53,6 @@ public class RestaurantMethodsTest
         assertEquals("879863698",restaurant2.getPhone());
     }
 
-
     @Test
     public void testFindAllRestaurantsAsJson() throws SQLException {
         System.out.println("testFindAllRestaurantsAsJson");
@@ -65,8 +64,7 @@ public class RestaurantMethodsTest
     @Test
     public void testFindRestaurantByIdAsJson() throws SQLException {
         System.out.println("testFindRestaurantByIdAsJson");
-        int id = 1;
-        String json = RestaurantMethods.findRestaurantByIdAsJson(restDao, new Scanner("1"));
+        String json = RestaurantMethods.findRestaurantByIdAsJson(restDao, new Scanner("4"));
         assertNotNull(json);
         assertFalse(json.isEmpty());
     }
