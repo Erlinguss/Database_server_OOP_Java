@@ -1,5 +1,10 @@
 package com.dkit.oop.sd2.DAOs;
 
+import com.dkit.oop.sd2.DAOs.Booking.BookingDaoInterface;
+import com.dkit.oop.sd2.DAOs.Booking.MySqlBookingDao;
+import com.dkit.oop.sd2.DAOs.Restaurant.MySqlRestaurantDao;
+import com.dkit.oop.sd2.DAOs.Restaurant.RestaurantDaoInterface;
+import com.dkit.oop.sd2.DTOs.BookingDTO;
 import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -53,11 +58,19 @@ public class Server {
         PrintWriter socketWriter;
         Socket socket;
         int clientNumber;
-        RestaurantDaoInterface restDao;
+        RestaurantDaoInterface restDao;// RESTAURANT
+
+        //=================================================
+        BookingDaoInterface bookingDao;// BOOKING
+        //=================================================
 
         public ClientHandler(Socket clientSocket, int clientNumber) {
             try {
-                restDao = new MySqlRestaurantDao();
+                restDao = new MySqlRestaurantDao();// RESTAURANT
+
+                //=================================================
+                bookingDao = new MySqlBookingDao();// BOOKING
+                //=================================================
 
                 InputStreamReader isReader = new InputStreamReader(clientSocket.getInputStream());
                 this.socketReader = new BufferedReader(isReader);
@@ -151,7 +164,42 @@ public class Server {
                             throw new RuntimeException(exception);
                         }
 
-                    } else {
+                    }
+
+                    /* ============================ ======================= ============================ */
+                    /* ============================ DELETE A BOOKING BY ID ============================ */
+                   else if (message.startsWith("displayAllBookings")) {
+                        try {
+                            System.out.println();
+
+                            displayAllBookingsAsJson();
+
+                        } catch (SQLException exception) {
+                            throw new RuntimeException(exception);
+                        }
+                    }
+
+                    else if (message.startsWith("deleteBooking")) {
+
+                        try {
+                            System.out.println();
+                            String tokens[] = message.split(" ");
+                            int id = Integer.parseInt(tokens[1]);
+                            String response = DeleteBookingAsJson(id);
+                            socketWriter.println(response);// send message to client
+
+                        } catch (SQLException exception) {
+                            throw new RuntimeException(exception);
+                        }
+
+                    }
+                    /* ============================ DELETE A BOOKING BY ID ============================ */
+                    /* ============================ ======================= ============================ */
+
+
+
+
+                    else {
                         socketWriter.println("I'm sorry I don't understand :(");
                     }
 
@@ -262,6 +310,69 @@ public class Server {
 
             return response;
         }
+
+
+
+        /* ============================ ================================================================ */
+        /* ============================METHOD TO DISPLAY ALL RESTAURANTS AS JSON========================= */
+        public void displayAllBookingsAsJson() throws IOException, SQLException {
+           BookingDaoInterface bookingDao = new MySqlBookingDao();
+            List<BookingDTO> booking = bookingDao.findAllBookingsWithRestaurantNames();
+
+            if (booking.isEmpty()) {
+                System.out.println("No booking found in database");
+                return;
+            }
+
+            JSONArray bookingArray = new JSONArray();
+
+            // Display restaurant data
+            for (BookingDTO bookings : booking) {
+                JSONObject bookingJson = new JSONObject();
+                bookingJson.put("booking_id", bookings.getBooking_id());
+                bookingJson.put("restaurant_id", bookings.getRestaurant_id());
+                bookingJson.put("customer_name", bookings.getCustomer_name());
+                bookingJson.put("customer_phone", bookings.getCustomer_phone());
+                bookingJson.put("booking_date", bookings.getBooking_date());
+                bookingJson.put("booking_time", bookings.getBooking_time());
+                bookingJson.put("num_guests", bookings.getNum_guests());
+                bookingArray .put(bookingJson);
+            }
+
+            JSONObject response = new JSONObject();
+            response.put("command", "displayAllBookings");
+            response.put("bookings",  bookingArray );
+
+            this.socketWriter.println(response.toString());
+
+        }
+        public String DeleteBookingAsJson(int id) throws IOException, SQLException {
+
+            BookingDaoInterface bookingDao = new MySqlBookingDao();
+            JSONObject BookingJsonObject = new JSONObject();
+            String response;
+            System.out.println();
+            if (bookingDao.deleteBookingById(id)) {
+                BookingJsonObject.put("id", id);
+                response = String.valueOf(BookingJsonObject.put("message", "The booking with the Id " + id + " was deleted!"));
+            } else {
+                BookingJsonObject.put("id", id);
+                response = String.valueOf(BookingJsonObject.put("message", "There was no booking for the id you specified"));
+            }
+
+            return response;
+        }
+
+        /* ============================ ================================================================ */
+        /* ============================ ================================================================ */
+
+
+
+
+
+
+
+
 
     }
 }

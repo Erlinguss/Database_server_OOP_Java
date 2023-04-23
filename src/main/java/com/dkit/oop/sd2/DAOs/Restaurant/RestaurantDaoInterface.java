@@ -1,4 +1,4 @@
-package com.dkit.oop.sd2.DAOs;
+package com.dkit.oop.sd2.DAOs.Restaurant;
 
 /** OOP Feb 2022
  * UserDaoInterface
@@ -39,23 +39,12 @@ public interface RestaurantDaoInterface {
 
     boolean deleteRestaurantById(int id) throws SQLException;
 
-    List<RestaurantDTO> findAllManagerContains(String subString) throws DaoException;
+    List<RestaurantDTO> findAllRestaurantContains(String subString) throws DaoException;
 
     RestaurantDTO insertRestaurant(RestaurantDTO restaurantDTO) throws SQLException;
 
     List<RestaurantDTO> findRestaurantsUsingFilter(Comparator<RestaurantDTO> comparator) throws SQLException;
 
-
-//    //BOOKING
-//
-//    List<BookingDTO> findAllBookingsWithRestaurantNames() throws SQLException;
-//
-//    BookingDTO findBookingId(int id)throws SQLException;
-//
-//    BookingDTO insertBooking(BookingDTO bookingDTO) throws DaoException;
-//
-//    boolean deleteBookingById(int id) throws SQLException;
-//List<BookingDTO> findBookingsUsingFilter(Comparator<BookingDTO> comparator) throws SQLException;
 
 
 }

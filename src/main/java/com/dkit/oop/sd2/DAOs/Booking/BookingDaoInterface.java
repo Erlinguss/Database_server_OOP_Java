@@ -1,4 +1,4 @@
-package com.dkit.oop.sd2.DAOs;
+package com.dkit.oop.sd2.DAOs.Booking;
 
 import com.dkit.oop.sd2.DTOs.BookingDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
@@ -18,6 +18,8 @@ public interface BookingDaoInterface {
     BookingDTO insertBooking(BookingDTO bookingDTO) throws DaoException;
 
     boolean deleteBookingById(int id) throws SQLException;
+
+    BookingDTO updateBookingDate(int booking_id, String booking_date) throws DaoException;
 
     List<BookingDTO> findBookingsUsingFilter(Comparator<BookingDTO> comparator) throws SQLException;
 }

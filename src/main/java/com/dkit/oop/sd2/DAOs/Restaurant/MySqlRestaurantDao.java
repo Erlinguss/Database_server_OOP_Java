@@ -1,4 +1,4 @@
-package com.dkit.oop.sd2.DAOs;
+package com.dkit.oop.sd2.DAOs.Restaurant;
 
 /** OOP Feb 2022
  *
@@ -16,6 +16,7 @@ package com.dkit.oop.sd2.DAOs;
  */
 
 
+import com.dkit.oop.sd2.DAOs.MySqlDao;
 import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
@@ -144,7 +145,7 @@ public class MySqlRestaurantDao extends MySqlDao implements RestaurantDaoInterfa
 
     /*===================METHOD TO FIND ALL MANAGER WITH SPECIFIC NAME=====================*/
     @Override
-    public List<RestaurantDTO> findAllManagerContains(String subString) throws DaoException {
+    public List<RestaurantDTO> findAllRestaurantContains(String subString) throws DaoException {
 
         String query = "SELECT * FROM restaurant WHERE name LIKE ?";
         List<RestaurantDTO> restList = new ArrayList<>();
@@ -167,7 +168,7 @@ public class MySqlRestaurantDao extends MySqlDao implements RestaurantDaoInterfa
 
             }
         } catch (SQLException e) {
-            throw new DaoException("Error finding all managers that contains: " + e.getMessage());
+            throw new DaoException("Error finding restaurant that contains: " + e.getMessage());
         }
 
         return restList;
@@ -214,10 +215,8 @@ public class MySqlRestaurantDao extends MySqlDao implements RestaurantDaoInterfa
     }
 
     /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
-
-//    public boolean deleteRestaurantById(int id)  throws DaoException {
-//
-//
+//    @Override
+//    public boolean deleteRestaurantById(int id) throws DaoException {
 //        String sql = "DELETE FROM restaurant WHERE id=?";
 //
 //        try (Connection connection = this.getConnection();
@@ -225,27 +224,45 @@ public class MySqlRestaurantDao extends MySqlDao implements RestaurantDaoInterfa
 //
 //            statement.setInt(1, id);
 //
-//            statement.executeUpdate();
+//            int rowsAffected = statement.executeUpdate();
+//
+//            if (rowsAffected > 0) {
+//                return true;
+//            } else {
+//                return false;
+//            }
 //
 //        } catch (SQLException e) {
 //            throw new DaoException("Error deleting restaurant by id: " + e.getMessage());
 //        }
-//        return false;
+//    }
 
+    /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
     @Override
     public boolean deleteRestaurantById(int id) throws DaoException {
-        String sql = "DELETE FROM restaurant WHERE id=?";
+        String deleteBookingsSql = "DELETE FROM booking WHERE restaurant_id=?";
+        String deleteRestaurantSql = "DELETE FROM restaurant WHERE id=?";
 
         try (Connection connection = this.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement deleteBookingsStatement = connection.prepareStatement(deleteBookingsSql);
+             PreparedStatement deleteRestaurantStatement = connection.prepareStatement(deleteRestaurantSql)) {
 
-            statement.setInt(1, id);
+            connection.setAutoCommit(false);
 
-            int rowsAffected = statement.executeUpdate();
+            // Delete bookings for the restaurant
+            deleteBookingsStatement.setInt(1, id);
+            int bookingsRowsAffected = deleteBookingsStatement.executeUpdate();
 
-            if (rowsAffected > 0) {
+            // Delete the restaurant
+            deleteRestaurantStatement.setInt(1, id);
+            int restaurantRowsAffected = deleteRestaurantStatement.executeUpdate();
+
+            if (bookingsRowsAffected > 0 && restaurantRowsAffected > 0) {
+                connection.commit();
                 return true;
             } else {
+
+                connection.rollback(); // Rollback the transaction if either deletion failed
                 return false;
             }
 
@@ -262,33 +279,6 @@ public class MySqlRestaurantDao extends MySqlDao implements RestaurantDaoInterfa
         return restaurants;
     }
 
-
-
-    //BOOKING METHODS
-//    @Override
-//    public List<BookingDTO> findAllBookingsWithRestaurantNames() throws SQLException {
-//        return null;
-//    }
-//
-//    @Override
-//    public BookingDTO findBookingId(int id) throws SQLException {
-//        return null;
-//    }
-//
-//    @Override
-//    public BookingDTO insertBooking(BookingDTO bookingDTO) throws DaoException {
-//        return null;
-//    }
-//
-//    @Override
-//    public boolean deleteBookingById(int id) throws SQLException {
-//        return false;
-//    }
-//
-//    @Override
-//    public List<BookingDTO> findBookingsUsingFilter(Comparator<BookingDTO> comparator) throws SQLException {
-//        return null;
-//    }
 
 
 }

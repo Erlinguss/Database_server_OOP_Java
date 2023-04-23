@@ -1,5 +1,6 @@
-package com.dkit.oop.sd2.DAOs;
+package com.dkit.oop.sd2.DAOs.Booking;
 
+import com.dkit.oop.sd2.DAOs.MySqlDao;
 import com.dkit.oop.sd2.DTOs.BookingDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 
@@ -7,10 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 
 public class MySqlBookingDao extends MySqlDao implements BookingDaoInterface {
@@ -32,7 +29,7 @@ public class MySqlBookingDao extends MySqlDao implements BookingDaoInterface {
                     "JOIN restaurant ON booking.restaurant_id = restaurant.id";
             ps = connection.prepareStatement(query);
 
-            // Using a PreparedStatement to execute SQL...
+            // Using a PreparedStatement to execute SQL
             resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 int booking_id = resultSet.getInt("booking_id");
@@ -169,56 +166,38 @@ public class MySqlBookingDao extends MySqlDao implements BookingDaoInterface {
         }
     }
 
-    /*=================METHOD TO SORT ALL BOOKING BY FILTER========================*/
+    @Override
+    public BookingDTO updateBookingDate(int booking_id, String booking_date) throws DaoException {
+        String sql = "UPDATE booking SET booking_date = ? WHERE booking_id = ?";
 
+        try (Connection connection = this.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setObject(1, booking_date);
+            statement.setInt(2, booking_id);
+
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DaoException("Booking with ID " + booking_id+ " not found.");
+            }
+
+        } catch (SQLException e) {
+            throw new DaoException("Error updating booking date: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    /*=================METHOD TO SORT ALL BOOKING BY FILTERS========================*/
     @Override
     public List<BookingDTO> findBookingsUsingFilter(Comparator<BookingDTO> comparator) throws SQLException {
-        List<BookingDTO> restaurants = findAllBookingsWithRestaurantNames();
-        restaurants.sort(comparator);
-        return restaurants;
+        List<BookingDTO> bookings = findAllBookingsWithRestaurantNames();
+        bookings.sort(comparator);
+        return  bookings;
     }
 
 
 
-
-
-
-
-    //RESTAURANT METHODS
-//
-//    @Override
-//    public List<RestaurantDTO> findAllRestaurants() throws SQLException {
-//        return null;
-//    }
-//
-//    @Override
-//    public RestaurantDTO findRestaurantById(int id) throws SQLException {
-//        return null;
-//    }
-//
-//    @Override
-//    public RestaurantDTO updatePhone(String name, int phone) throws DaoException {
-//        return null;
-//    }
-//
-//    @Override
-//    public boolean deleteRestaurantById(int id) throws SQLException {
-//        return false;
-//    }
-//
-//    @Override
-//    public List<RestaurantDTO> findAllManagerContains(String subString) throws DaoException {
-//        return null;
-//    }
-//
-//    @Override
-//    public RestaurantDTO insertRestaurant(RestaurantDTO restaurantDTO) throws SQLException {
-//        return null;
-//    }
-//    @Override
-//    public List<RestaurantDTO> findRestaurantsUsingFilter(Comparator<RestaurantDTO> comparator) throws SQLException {
-//        return null;
-//    }
 
 
 }

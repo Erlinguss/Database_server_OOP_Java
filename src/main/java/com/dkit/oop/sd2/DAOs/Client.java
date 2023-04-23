@@ -43,7 +43,9 @@ public class Client {
                 System.out.println("║ 2. Get restaurant by ID              ║");
                 System.out.println("║ 3. Add a restaurant                  ║");
                 System.out.println("║ 4. Delete a restaurant               ║");
-                System.out.println("║ 5. Exit                              ║");
+                System.out.println("║ 5. Display all bookings              ║");
+                System.out.println("║ 6. Delete booking                    ║");
+                System.out.println("║ 7. Exit                              ║");
                 System.out.println("╚══════════════════════════════════════╝");
                 System.out.print("> ");
 
@@ -107,7 +109,45 @@ public class Client {
                        // in.nextLine();
                         break;
 
+
+                    /* ================================================================================ */
+
+                    /* ================================================================================ */
+
                     case "5":
+
+                    /* ========================= COMMAND TO DISPLAY ALL BOOKINGS========================= */
+                    socketWriter.println("displayAllBookings");
+                    String jsonString3 = socketReader.nextLine();
+                    // Parse JSON response
+                    JSONObject response2 = new JSONObject(jsonString3);
+                    System.out.println("Client message: Response from server Time: " + jsonString3);
+                    break;
+
+                    case "6":
+                        /* =======================COMMAND TO DELETE A BOOKING BY ID ====================== */
+                        System.out.println("Enter ID of the booking to delete: ");
+                        System.out.print("> ");
+                        int bookingId = Integer.parseInt(in.nextLine());
+                        String deleteCommandBooking = "deleteBooking " + bookingId;
+                        socketWriter.println(deleteCommandBooking);      // Send request to server
+
+                        String deleteResponseBooking = socketReader.nextLine();// Wait for response from server
+                        if (deleteResponseBooking.equals("{}")) {
+                            System.out.println("There is no booking with the specified ID.");
+                        } else {
+                            System.out.println("Booking deleted successfully!");
+                        }
+                        // in.nextLine();
+                        break;
+
+                    /* ================================================================================ */
+
+                    /* ================================================================================ */
+
+
+
+                    case "7":
                         System.out.println("Exiting...");
                         return;
                     default:
