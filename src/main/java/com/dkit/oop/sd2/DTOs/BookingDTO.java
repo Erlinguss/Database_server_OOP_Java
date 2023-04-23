@@ -4,27 +4,28 @@ public class BookingDTO {
 
     private int booking_id;
     private int restaurant_id;
-
     private String restaurant_name;
     private String customer_name;
     private String customer_phone;
     private String booking_date;
+    private String booking_time;
     private int num_guests;
 
-    public BookingDTO(int booking_id, int restaurant_id, String restaurant_name,String customer_name, String customer_phone, String booking_date, int num_guests) {
+    public BookingDTO(int booking_id, int restaurant_id, String restaurant_name,String customer_name, String customer_phone, String booking_date,String booking_time, int num_guests) {
+
         this.booking_id = booking_id;
         this.restaurant_id = restaurant_id;
         this.restaurant_name = restaurant_name;
         this.customer_name = customer_name;
         this.customer_phone = customer_phone;
         this.booking_date= booking_date;
+        this.booking_time= booking_time;
         this.num_guests = num_guests;
     }
 
     public BookingDTO()
     {
     }
-
 
 
     public int getBooking_id() {
@@ -67,6 +68,13 @@ public class BookingDTO {
         this.booking_date = booking_date;
     }
 
+    public String getBooking_time() {
+        return booking_time;
+    }
+
+    public void setBooking_time(String booking_time) {
+        this.booking_time = booking_time;
+    }
     public int getNum_guests() {
         return num_guests;
     }
@@ -83,7 +91,8 @@ public class BookingDTO {
                 ", restaurant_name=" + restaurant_name +
                 ", customer_name='" + customer_name + '\'' +
                 ", customer_phone='" + customer_phone + '\'' +
-                ", booking_Date&Time='" + booking_date + '\'' +
+                ", booking_Date='" + booking_date + '\'' +
+                ", booking_Time='" + booking_time + '\'' +
                 ", num_guests=" + num_guests +
                 '}';
     }

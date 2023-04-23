@@ -1,11 +1,10 @@
 package com.dkit.oop.sd2.DAOs;
-import com.dkit.oop.sd2.DTOs.RestaurantDTO;
+
 import com.dkit.oop.sd2.DTOs.BookingDTO;
+import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,7 +23,7 @@ public class MySqlBookingDao extends MySqlDao implements UserDaoInterface{
             // Get connection object using the methods in the super class (MySqlDao.java)...
             connection = this.getConnection();
 
-            String query = "SELECT booking.booking_id, booking.restaurant_id, restaurant.name, booking.customer_name, booking.customer_phone, booking.booking_date, booking.num_guests " +
+            String query = "SELECT booking.booking_id, booking.restaurant_id, restaurant.name, booking.customer_name, booking.customer_phone, booking.booking_date, booking.booking_time, booking.num_guests " +
                     "FROM booking " +
                     "JOIN restaurant ON booking.restaurant_id = restaurant.id";
             ps = connection.prepareStatement(query);
@@ -38,8 +37,9 @@ public class MySqlBookingDao extends MySqlDao implements UserDaoInterface{
                 String customer_name = resultSet.getString("customer_name");
                 String customer_phone = resultSet.getString("customer_phone");
                 String booking_date = resultSet.getString("booking_date");
+                String booking_time = resultSet.getString("booking_time");
                 int num_guests = resultSet.getInt("num_guests");
-               BookingDTO booking = new BookingDTO(booking_id, restaurant_id, restaurant_name, customer_name, customer_phone, booking_date, num_guests);
+               BookingDTO booking = new BookingDTO(booking_id, restaurant_id, restaurant_name, customer_name, customer_phone, booking_date, booking_time, num_guests);
                // BookingDTO booking = new BookingDTO(booking_id, restaurant_id, customer_name, customer_phone, booking_date, num_guests);
 
                 bookings.add(booking);
@@ -73,7 +73,7 @@ public class MySqlBookingDao extends MySqlDao implements UserDaoInterface{
         BookingDTO booking = null;
         try {
             connection = this.getConnection();
-            String query = "SELECT booking.booking_id, booking.restaurant_id, restaurant.name, booking.customer_name, booking.customer_phone, booking.booking_date, booking.num_guests " +
+            String query = "SELECT booking.booking_id, booking.restaurant_id, restaurant.name, booking.customer_name, booking.customer_phone, booking.booking_date, booking.booking_time, booking.num_guests " +
                     "FROM booking " +
                     "INNER JOIN restaurant " +
                     "ON booking.restaurant_id = restaurant.id " +
@@ -89,8 +89,9 @@ public class MySqlBookingDao extends MySqlDao implements UserDaoInterface{
                 String customer_name= resultSet.getString("customer_name");
                 String customer_phone = resultSet.getString("customer_phone");
                 String booking_date = resultSet.getString("booking_date");
+                String booking_time = resultSet.getString("booking_time");
                 int num_guests = resultSet.getInt("num_guests");
-                booking = new BookingDTO(id, restaurant_id, restaurant_name,customer_name, customer_phone, booking_date, num_guests);
+                booking = new BookingDTO(id, restaurant_id, restaurant_name,customer_name, customer_phone, booking_date, booking_time, num_guests);
             }
         } catch (SQLException e) {
             throw new DaoException("Error finding booking by id: " + e.getMessage());
@@ -113,8 +114,38 @@ public class MySqlBookingDao extends MySqlDao implements UserDaoInterface{
     }
 
 
-    public boolean deleteBookingById(int id) throws DaoException {
-        String sql = "DELETE FROM booking WHERE id=?";
+    @Override
+    public BookingDTO insertBooking(BookingDTO bookingDTO) throws DaoException {
+        String sql = "INSERT INTO booking (restaurant_id, customer_name, customer_phone, booking_date, booking_time, num_guests) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = this.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setInt(1, bookingDTO.getRestaurant_id());
+            statement.setString(2, bookingDTO.getCustomer_name());
+            statement.setString(3, bookingDTO.getCustomer_phone());
+            statement.setString(4, bookingDTO.getBooking_date());
+            statement.setString(5, bookingDTO.getBooking_time());
+            statement.setInt(6, bookingDTO.getNum_guests());
+
+            statement.executeUpdate();
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                bookingDTO.setBooking_id(generatedKeys.getInt(1));
+            }
+
+        } catch (SQLException e) {
+            throw new DaoException("Error adding booking: " + e.getMessage());
+        }
+
+        return bookingDTO;
+    }
+
+
+        public boolean deleteBookingById(int id) throws DaoException {
+        String sql = "DELETE FROM booking WHERE booking_id=?";
 
         try (Connection connection = this.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -134,6 +165,14 @@ public class MySqlBookingDao extends MySqlDao implements UserDaoInterface{
         }
     }
 
+    /*=================METHOD TO SORT ALL BOOKING BY FILTER========================*/
+
+    @Override
+    public List<BookingDTO> findBookingsUsingFilter(Comparator<BookingDTO> comparator) throws SQLException {
+        List<BookingDTO> restaurants = findAllBookingsWithRestaurantNames();
+        restaurants.sort(comparator);
+        return restaurants;
+    }
 
 
 
@@ -141,6 +180,7 @@ public class MySqlBookingDao extends MySqlDao implements UserDaoInterface{
 
 
 
+    //RESTAURANT METHODS
 
     @Override
     public List<RestaurantDTO> findAllRestaurants() throws SQLException {
@@ -171,7 +211,6 @@ public class MySqlBookingDao extends MySqlDao implements UserDaoInterface{
     public RestaurantDTO insertRestaurant(RestaurantDTO restaurantDTO) throws SQLException {
         return null;
     }
-
     @Override
     public List<RestaurantDTO> findRestaurantsUsingFilter(Comparator<RestaurantDTO> comparator) throws SQLException {
         return null;

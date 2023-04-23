@@ -30,6 +30,9 @@ import java.util.List;
 
 public interface UserDaoInterface {
 
+
+    List<BookingDTO> findBookingsUsingFilter(Comparator<BookingDTO> comparator) throws SQLException;
+
     // RESTAURANT
     List<RestaurantDTO> findAllRestaurants() throws SQLException;
 
@@ -51,4 +54,9 @@ public interface UserDaoInterface {
     List<BookingDTO> findAllBookingsWithRestaurantNames() throws SQLException;
 
     BookingDTO findBookingId(int id)throws SQLException;
+
+    BookingDTO insertBooking(BookingDTO bookingDTO) throws DaoException;
+
+    boolean deleteBookingById(int id) throws SQLException;
+
 }

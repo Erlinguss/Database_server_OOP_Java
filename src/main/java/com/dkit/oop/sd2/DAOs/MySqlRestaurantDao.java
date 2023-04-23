@@ -29,6 +29,8 @@ import java.util.List;
 
 public class MySqlRestaurantDao extends MySqlDao implements UserDaoInterface
 {
+
+
     /*==========================METHOD TO DISPLAY ALL RESTAURANTS=========================*/
     @Override
     public List<RestaurantDTO> findAllRestaurants() throws SQLException
@@ -270,6 +272,21 @@ public class MySqlRestaurantDao extends MySqlDao implements UserDaoInterface
 
     @Override
     public BookingDTO findBookingId(int id) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public BookingDTO insertBooking(BookingDTO bookingDTO) throws DaoException {
+        return null;
+    }
+
+    @Override
+    public boolean deleteBookingById(int id) throws SQLException {
+        return false;
+    }
+
+    @Override
+    public List<BookingDTO> findBookingsUsingFilter(Comparator<BookingDTO> comparator) throws SQLException {
         return null;
     }
 

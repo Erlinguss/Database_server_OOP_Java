@@ -234,27 +234,32 @@ public class App {
 
                     case Booking_by_ID:
                         searchBookingById(BookingDao,scanner);
-                        //  System.out.println();
+                        System.out.println();
                         break;
 
                     case Add_a_new_booking:
-                        //  System.out.println();
+                        addNewBooking(BookingDao,scanner);
+                         System.out.println();
                         break;
 
                     case DeleteBooking:
-                        // System.out.println();
+                        deleteBookingById(BookingDao,scanner);
+                        System.out.println();
                         break;
 
                     case View_booking_sorted_by_date:
-                        // System.out.println();
+                        viewBookingSortedByRating(BookingDao);
+                         System.out.println();
                         break;
 
                     case Find_all_booking_as_JSON:
-                        //System.out.println();
+                        System.out.println(findAllBookingsAsJson(BookingDao));
+                        System.out.println();
                         break;
 
                     case Find_a_booking_by_ID_as_JSON:
-                        //System.out.println();
+                        System.out.println(findBookingByIdAsJson(BookingDao, scanner));
+                        System.out.println();
 
                         break;
 
@@ -395,6 +400,88 @@ public class App {
             System.out.println(booking);
         } else {
             System.out.println("Restaurant not found.");
+        }
+    }
+
+    /*===========================METHOD TO ADD A NEW BOOKING=========================*/
+
+    public static void addNewBooking(UserDaoInterface bookingDao, Scanner scanner) throws SQLException {
+        System.out.print("Enter restaurant id: ");
+        int restaurant_id = scanner.nextInt();
+
+        System.out.print("Enter customer name: ");
+        String customer_name = scanner.next();
+
+        System.out.print("Enter customer phone number: ");
+        String customer_phone = scanner.next();
+
+        System.out.print("Enter booking date (yyyy-mm-dd): ");// 2023-05-05
+        String booking_date = scanner.next();
+
+        System.out.print("Enter booking time (hh-mm-ss): ");// 14:30:00
+        String booking_time = scanner.next();
+
+        System.out.print("Enter number of guests: ");
+        int num_guests = scanner.nextInt();
+
+        BookingDTO bookingDTO = new BookingDTO(0, restaurant_id, null, customer_name, customer_phone, booking_date,booking_time, num_guests);
+        bookingDTO = bookingDao.insertBooking(bookingDTO);
+
+        System.out.println("New booking was added successfully");
+    }
+
+    /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
+    public static void deleteBookingById(UserDaoInterface bookingDao, Scanner scanner) throws SQLException {
+
+        System.out.print("Enter restaurant ID: ");
+        int id = scanner.nextInt();
+        boolean restaurant = bookingDao.deleteBookingById(id);
+        if (restaurant) {
+            System.out.println("Booking deleted successfully.");
+        } else {
+            System.out.println("Booking with Id " + id + " not found.");
+        }
+    }
+
+    /*=================METHOD TO SORT ALL BOOKING BY RATING ========================*/
+    public static void viewBookingSortedByRating(UserDaoInterface bookingDao) throws SQLException {
+
+        List<BookingDTO> bookings = bookingDao.findBookingsUsingFilter((Comparator.comparing(BookingDTO::getBooking_date).reversed()));
+        for (BookingDTO booking : bookings) {
+            System.out.println(booking);
+        }
+    }
+
+    /*============METHOD TO DISPLAY ALL BOOKING AS JSON FORMAT ====================*/
+    public static String findAllBookingsAsJson(UserDaoInterface bookingDao) throws SQLException {
+
+        List<BookingDTO> bookings = bookingDao.findAllBookingsWithRestaurantNames();
+        //Gson gson = new Gson(); Displaying the Json data in line
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();// Displaying the data en Json format
+
+        try {
+            return gson.toJson(bookings);
+        } catch (Exception e) {
+            throw new DaoException("Error converting restaurants to JSON");
+        }
+    }
+
+    /*========METHOD TO FIND A BOOKING BY ID AND DISPLAYED AS JSON FORMAT==========*/
+    public static String findBookingByIdAsJson(UserDaoInterface bookingDao, Scanner scanner) throws SQLException {
+
+        System.out.print("Enter booking by ID: ");
+        int id = scanner.nextInt();
+        BookingDTO bookings = bookingDao.findBookingId(id);
+        if (bookings != null) {
+            // Gson gson = new Gson(); Displaying the Json data in line
+            Gson gson = new GsonBuilder().setPrettyPrinting().create(); // Displaying the data as Json format
+            try {
+                return gson.toJson(bookings);
+            } catch (Exception e) {
+                throw new DaoException("Error converting booking to JSON");
+            }
+        } else {
+            return "Booking not found.";
         }
     }
 
