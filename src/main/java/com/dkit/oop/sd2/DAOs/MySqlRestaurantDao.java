@@ -290,21 +290,6 @@ public class MySqlRestaurantDao extends MySqlDao implements RestaurantDaoInterfa
 //        return null;
 //    }
 
-    @Override
-    public BookingDTO insertBooking(BookingDTO bookingDTO) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public boolean deleteBookingById(int id) throws SQLException {
-        return false;
-    }
-
-    @Override
-    public List<BookingDTO> findBookingsUsingFilter(Comparator<BookingDTO> comparator) throws SQLException {
-        return null;
-    }
-
 
 }
 
