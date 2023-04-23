@@ -238,38 +238,95 @@ public class MySqlRestaurantDao extends MySqlDao implements RestaurantDaoInterfa
 //    }
 
     /*===================METHOD TO DELETE ANY RESTAURANT BY ID=========================*/
+//    @Override
+//    public boolean deleteRestaurantById(int id) throws DaoException {
+//        String deleteBookingsSql = "DELETE FROM booking WHERE restaurant_id=?";
+//        String deleteRestaurantSql = "DELETE FROM restaurant WHERE id=?";
+//
+//        try (Connection connection = this.getConnection();
+//             PreparedStatement deleteBookingsStatement = connection.prepareStatement(deleteBookingsSql);
+//             PreparedStatement deleteRestaurantStatement = connection.prepareStatement(deleteRestaurantSql)) {
+//
+//            connection.setAutoCommit(false);
+//
+//            // Delete bookings for the restaurant
+//            deleteBookingsStatement.setInt(1, id);
+//            int bookingsRowsAffected = deleteBookingsStatement.executeUpdate();
+//
+//            // Delete the restaurant
+//            deleteRestaurantStatement.setInt(1, id);
+//            int restaurantRowsAffected = deleteRestaurantStatement.executeUpdate();
+//
+//            if (bookingsRowsAffected > 0 && restaurantRowsAffected > 0) {
+//                connection.commit();
+//                return true;
+//            } else {
+//
+//                connection.rollback(); // Rollback the transaction if either deletion failed
+//                return false;
+//            }
+//
+//        } catch (SQLException e) {
+//            throw new DaoException("Error deleting restaurant by id: " + e.getMessage());
+//        }
+//    }
+
+
     @Override
     public boolean deleteRestaurantById(int id) throws DaoException {
+        String checkBookingsSql = "SELECT COUNT(*) FROM booking WHERE restaurant_id=?";
         String deleteBookingsSql = "DELETE FROM booking WHERE restaurant_id=?";
         String deleteRestaurantSql = "DELETE FROM restaurant WHERE id=?";
 
         try (Connection connection = this.getConnection();
+             PreparedStatement checkBookingsStatement = connection.prepareStatement(checkBookingsSql);
              PreparedStatement deleteBookingsStatement = connection.prepareStatement(deleteBookingsSql);
              PreparedStatement deleteRestaurantStatement = connection.prepareStatement(deleteRestaurantSql)) {
 
             connection.setAutoCommit(false);
 
-            // Delete bookings for the restaurant
-            deleteBookingsStatement.setInt(1, id);
-            int bookingsRowsAffected = deleteBookingsStatement.executeUpdate();
+            // Check if the restaurant has any bookings
+            checkBookingsStatement.setInt(1, id);
+            ResultSet resultSet = checkBookingsStatement.executeQuery();
+            resultSet.next();
+            int bookingsCount = resultSet.getInt(1);
 
-            // Delete the restaurant
-            deleteRestaurantStatement.setInt(1, id);
-            int restaurantRowsAffected = deleteRestaurantStatement.executeUpdate();
+            // Delete bookings and restaurant if the restaurant has bookings
+            if (bookingsCount > 0) {
+                deleteBookingsStatement.setInt(1, id);
+                int bookingsRowsAffected = deleteBookingsStatement.executeUpdate();
 
-            if (bookingsRowsAffected > 0 && restaurantRowsAffected > 0) {
-                connection.commit();
-                return true;
-            } else {
+                deleteRestaurantStatement.setInt(1, id);
+                int restaurantRowsAffected = deleteRestaurantStatement.executeUpdate();
 
-                connection.rollback(); // Rollback the transaction if either deletion failed
-                return false;
+                if (bookingsRowsAffected > 0 && restaurantRowsAffected > 0) {
+                    connection.commit();
+                    return true;
+                } else {
+                    connection.rollback(); // Rollback the transaction if either deletion failed
+                    return false;
+                }
+            }
+            // Delete only the restaurant if it doesn't have any bookings
+            else {
+                deleteRestaurantStatement.setInt(1, id);
+                int restaurantRowsAffected = deleteRestaurantStatement.executeUpdate();
+
+                if (restaurantRowsAffected > 0) {
+                    connection.commit();
+                    return true;
+                } else {
+                    connection.rollback(); // Rollback the transaction if deletion failed
+                    return false;
+                }
             }
 
         } catch (SQLException e) {
             throw new DaoException("Error deleting restaurant by id: " + e.getMessage());
         }
     }
+
+
 
     /*=================METHOD TO SORT ALL RESTAURANTS BY FILTER========================*/
     @Override

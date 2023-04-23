@@ -44,8 +44,10 @@ public class Client {
                 System.out.println("║ 3. Add a restaurant                  ║");
                 System.out.println("║ 4. Delete a restaurant               ║");
                 System.out.println("║ 5. Display all bookings              ║");
-                System.out.println("║ 6. Delete booking                    ║");
-                System.out.println("║ 7. Exit                              ║");
+                System.out.println("║ 6. Display booking by Id             ║");
+                System.out.println("║ 7. Add booking                       ║");
+                System.out.println("║ 8. Delete booking                    ║");
+                System.out.println("║ 9. Exit                              ║");
                 System.out.println("╚══════════════════════════════════════╝");
                 System.out.print("> ");
 
@@ -125,6 +127,36 @@ public class Client {
                     break;
 
                     case "6":
+                        /* ========================= COMMAND TO DISPLAY RESTAURANTS BY ID======================= */
+                        System.out.println("Please enter a Booking ID: ");
+                        String stringId = in.nextLine();
+
+                        String request1 = "getBookingById " + stringId;
+                        socketWriter.println(request1);               // Send request to server
+
+                        String jsonString4 = socketReader.nextLine(); // Wait for response from server
+                        if (jsonString4.equals("{}"))
+                            System.out.println("There was no Booking for the ID you specified");
+                        else {
+                            System.out.println(jsonString4);
+                        }
+                        // in.nextLine(); // Consume newline character
+                        break;
+
+                    case "7":
+                        /* ===========================COMMAND TO ADD A BOOKING ============================ */
+                        System.out.println("Please enter restaurant details in the format:addBooking, Restaurant ID, Customer Name, Customer Phone, Booking Date (YYYY-MM-DD), Booking Time (HH:MM), Number of Guests");
+                        System.out.print("> ");
+                        String bookingDetails = in.nextLine();
+                        String addCommandBooking = "addBooking " + bookingDetails;
+                        socketWriter.println(addCommandBooking );              // Send request to server
+
+                        String responseBooking = socketReader.nextLine(); // Wait for response from server
+                        System.out.println(responseBooking);
+                        // in.nextLine();
+                        break;   // addBooking, 10, felix, 898989895, 2023-11-03, 20:00:00, 2
+
+                    case "8":
                         /* =======================COMMAND TO DELETE A BOOKING BY ID ====================== */
                         System.out.println("Enter ID of the booking to delete: ");
                         System.out.print("> ");
@@ -145,9 +177,7 @@ public class Client {
 
                     /* ================================================================================ */
 
-
-
-                    case "7":
+                    case "9":
                         System.out.println("Exiting...");
                         return;
                     default:

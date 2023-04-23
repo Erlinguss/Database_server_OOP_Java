@@ -60,17 +60,15 @@ public class Server {
         int clientNumber;
         RestaurantDaoInterface restDao;// RESTAURANT
 
-        //=================================================
         BookingDaoInterface bookingDao;// BOOKING
-        //=================================================
+
 
         public ClientHandler(Socket clientSocket, int clientNumber) {
             try {
                 restDao = new MySqlRestaurantDao();// RESTAURANT
 
-                //=================================================
                 bookingDao = new MySqlBookingDao();// BOOKING
-                //=================================================
+
 
                 InputStreamReader isReader = new InputStreamReader(clientSocket.getInputStream());
                 this.socketReader = new BufferedReader(isReader);
@@ -125,7 +123,7 @@ public class Server {
                     else if (message.startsWith("addRestaurant")) {
                         String[] tokens = message.split(", ");
                         if (tokens.length < 5) {
-                            socketWriter.println("Invalid format. Please enter restaurant details in the format: addRestaurant, Name, Manager, Phone, Rating");
+                            socketWriter.println("Invalid format.");
                             return;
                         }
                         //addRestaurant, Taco Taco, Pablo Escobar, 544991234, 4 //example to insert in the client site
@@ -166,6 +164,7 @@ public class Server {
 
                     }
 
+
                     /* ============================ ======================= ============================ */
                     /* ============================ DELETE A BOOKING BY ID ============================ */
                    else if (message.startsWith("displayAllBookings")) {
@@ -177,6 +176,48 @@ public class Server {
                         } catch (SQLException exception) {
                             throw new RuntimeException(exception);
                         }
+                    }
+
+                    else if (message.startsWith("getBookingById")) {
+
+                        String tokens[] = message.split(" ");  // default delimiter is a space
+
+                        int id = Integer.parseInt(tokens[1]);
+                        System.out.println("In run() command=" + tokens[0] + ", id from client =" + tokens[1]);
+                        String response1 =  getBookingByIdAsJSON(id);
+
+                        socketWriter.println(response1); // send message to client
+                    }
+
+                    /* ============================ TO ADD A BOOKING ============================ */
+                    else if (message.startsWith("addBooking")) {
+                        String[] tokens = message.split(", ");
+                        if (tokens.length < 7) {
+                            socketWriter.println("Invalid format.");
+                            return;
+                        }
+                        // ei. addBooking, 10, felix, 898989895, 2023-11-03, 20:00:00, 2// Example to insert in the client side.
+
+                        int restaurantId = Integer.parseInt(tokens[1].trim());
+                        String customerName = tokens[2].trim();
+                        String customerPhone = tokens[3].trim();
+                        String bookingDate = tokens[4].trim();
+                        String bookingTime = tokens[5].trim();
+                        int numGuests = Integer.parseInt(tokens[6].trim());
+
+                        BookingDTO booking = new BookingDTO();
+                        booking.setRestaurant_id(restaurantId);
+                        booking.setCustomer_name(customerName);
+                        booking.setCustomer_phone(customerPhone);
+                        booking.setBooking_date(bookingDate);
+                        booking.setBooking_time(bookingTime);
+                        booking.setNum_guests(numGuests);
+
+                        String response = addBookingAsJson(booking);
+
+                        // send message to client
+                        socketWriter.println(response);
+
                     }
 
                     else if (message.startsWith("deleteBooking")) {
@@ -193,10 +234,8 @@ public class Server {
                         }
 
                     }
-                    /* ============================ DELETE A BOOKING BY ID ============================ */
+                    /* ================================================================================= */
                     /* ============================ ======================= ============================ */
-
-
 
 
                     else {
@@ -346,6 +385,51 @@ public class Server {
             this.socketWriter.println(response.toString());
 
         }
+        public String getBookingByIdAsJSON(int id) throws IOException, SQLException {
+
+            BookingDaoInterface bookingDao = new MySqlBookingDao();
+            BookingDTO booking = bookingDao.findBookingId(id);
+
+            String response = null;
+
+            if (booking == null) {
+                System.out.println("No booking found with ID: " + id + ", so, return a JSon String with empty object");
+                response = "{}"; // empty object
+            } else {
+
+                JSONObject bookingJsonObject = new JSONObject();
+                bookingJsonObject.put("booking_id", booking.getBooking_id());
+                bookingJsonObject.put("restaurant_id", booking.getRestaurant_id());
+                bookingJsonObject.put("customer_name", booking.getCustomer_name());
+                bookingJsonObject.put("customer_phone", booking.getCustomer_phone());
+                bookingJsonObject.put("booking_date", booking.getBooking_date());
+                bookingJsonObject.put("booking_time", booking.getBooking_time());
+                bookingJsonObject.put("num_guests", booking.getNum_guests());
+
+                response = bookingJsonObject.toString();
+
+            }
+
+            return response;  // which is JSON String format
+        }
+
+        public String addBookingAsJson(BookingDTO bookingDTO) throws IOException, SQLException {
+            BookingDaoInterface bookingDao = new MySqlBookingDao();
+            BookingDTO booking = bookingDao.insertBooking(bookingDTO);
+
+            JSONObject bookingJsonObject = new JSONObject();
+            bookingJsonObject.put("booking_id", booking.getBooking_id());
+            bookingJsonObject.put("restaurant_id", booking.getRestaurant_id());
+            bookingJsonObject.put("customer_name", booking.getCustomer_name());
+            bookingJsonObject.put("customer_phone", booking.getCustomer_phone());
+            bookingJsonObject.put("booking_date", booking.getBooking_date());
+            bookingJsonObject.put("booking_time", booking.getBooking_time());
+            bookingJsonObject.put("num_guests", booking.getNum_guests());
+
+            return bookingJsonObject.toString();  // which is JSON String format
+        }
+
+
         public String DeleteBookingAsJson(int id) throws IOException, SQLException {
 
             BookingDaoInterface bookingDao = new MySqlBookingDao();
