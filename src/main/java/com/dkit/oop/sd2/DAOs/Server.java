@@ -141,9 +141,7 @@ public class Server {
                         String response1 = addRestaurantAsJson(restaurant);
 
                         // send message to client
-
                        socketWriter.println(response1 );
-                      // socketWriter.println("Restaurant added successfully!" );
 
 
                     }
@@ -164,9 +162,7 @@ public class Server {
 
                     }
 
-
-                    /* ============================ ======================= ============================ */
-                    /* ============================ DELETE A BOOKING BY ID ============================ */
+                    /* ======================== DISPLAY ALL BOOKING ============================= */
                    else if (message.startsWith("displayAllBookings")) {
                         try {
                             System.out.println();
@@ -234,9 +230,6 @@ public class Server {
                         }
 
                     }
-                    /* ================================================================================= */
-                    /* ============================ ======================= ============================ */
-
 
                     else {
                         socketWriter.println("I'm sorry I don't understand :(");
@@ -350,10 +343,7 @@ public class Server {
             return response;
         }
 
-
-
-        /* ============================ ================================================================ */
-        /* ============================METHOD TO DISPLAY ALL RESTAURANTS AS JSON========================= */
+        /* ============================METHOD TO DISPLAY ALL BOOKING AS JSON========================= */
         public void displayAllBookingsAsJson() throws IOException, SQLException {
            BookingDaoInterface bookingDao = new MySqlBookingDao();
             List<BookingDTO> booking = bookingDao.findAllBookingsWithRestaurantNames();
@@ -385,6 +375,8 @@ public class Server {
             this.socketWriter.println(response.toString());
 
         }
+
+        /* ========================METHOD TO GET A BOOKING BY ID AS JSON======================= */
         public String getBookingByIdAsJSON(int id) throws IOException, SQLException {
 
             BookingDaoInterface bookingDao = new MySqlBookingDao();
@@ -413,6 +405,7 @@ public class Server {
             return response;  // which is JSON String format
         }
 
+        /* ============================METHOD TO ADD A BOOKING AS JSON========================= */
         public String addBookingAsJson(BookingDTO bookingDTO) throws IOException, SQLException {
             BookingDaoInterface bookingDao = new MySqlBookingDao();
             BookingDTO booking = bookingDao.insertBooking(bookingDTO);
@@ -429,7 +422,7 @@ public class Server {
             return bookingJsonObject.toString();  // which is JSON String format
         }
 
-
+        /* ==========================METHOD TO DELETE A BOOKING AS JSON===================== */
         public String DeleteBookingAsJson(int id) throws IOException, SQLException {
 
             BookingDaoInterface bookingDao = new MySqlBookingDao();
@@ -446,16 +439,6 @@ public class Server {
 
             return response;
         }
-
-        /* ============================ ================================================================ */
-        /* ============================ ================================================================ */
-
-
-
-
-
-
-
 
 
     }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Client {
@@ -15,6 +16,7 @@ public class Client {
         Client client = new Client();
         client.start();
     }
+
 
     public void start() {
         Scanner in = new Scanner(System.in);
@@ -35,6 +37,49 @@ public class Client {
 
             while (!command.equalsIgnoreCase("exit")) {
                 System.out.println("╔══════════════════════════════════════╗");
+                System.out.println("║            MAIN MENU                 ║");
+                System.out.println("╠══════════════════════════════════════╣");
+                System.out.println("║ Please choose an option:             ║");
+                System.out.println("╠══════════════════════════════════════╣");
+                System.out.println("║ 1. Restaurant Menu                   ║");
+                System.out.println("║ 2. Booking Menu                      ║");
+                System.out.println("║ 3. Exit                              ║");
+                System.out.println("╚══════════════════════════════════════╝");
+                System.out.print("> ");
+
+                command = in.nextLine();
+
+                switch (command.toLowerCase()) {
+                    case "1":
+                        restaurantMenu(socketWriter, socketReader, in);
+                        break;
+                    case "2":
+                        bookingMenu(socketWriter, socketReader, in);
+                        break;
+                    case "3":
+                        command = "exit";
+                        break;
+                    default:
+                        System.out.println("Invalid command");
+                        break;
+                }
+            }
+
+            socket.close();
+            System.out.println("Client message: The Client has stopped running");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void restaurantMenu(PrintWriter socketWriter, Scanner socketReader, Scanner in) {
+
+        try {
+            String command = "";
+
+            while (!command.equalsIgnoreCase("exit")) {
+                System.out.println("╔══════════════════════════════════════╗");
                 System.out.println("║            RESTAURANT MENU           ║");
                 System.out.println("╠══════════════════════════════════════╣");
                 System.out.println("║ Please choose an option:             ║");
@@ -43,11 +88,7 @@ public class Client {
                 System.out.println("║ 2. Get restaurant by ID              ║");
                 System.out.println("║ 3. Add a restaurant                  ║");
                 System.out.println("║ 4. Delete a restaurant               ║");
-                System.out.println("║ 5. Display all bookings              ║");
-                System.out.println("║ 6. Display booking by Id             ║");
-                System.out.println("║ 7. Add booking                       ║");
-                System.out.println("║ 8. Delete booking                    ║");
-                System.out.println("║ 9. Exit                              ║");
+                System.out.println("║ 5. Exit                              ║");
                 System.out.println("╚══════════════════════════════════════╝");
                 System.out.print("> ");
 
@@ -78,7 +119,7 @@ public class Client {
                         else {
                             System.out.println(jsonString2);
                         }
-                       // in.nextLine(); // Consume newline character
+                        // in.nextLine(); // Consume newline character
                         break;
 
                     case "3":
@@ -91,8 +132,8 @@ public class Client {
 
                         String response = socketReader.nextLine(); // Wait for response from server
                         System.out.println(response);
-                       // in.nextLine();
-                        break;
+                        // in.nextLine();
+                        break;  //addRestaurant, Taco Taco, Pablo Escobar, 544991234, 4 //example to insert in the client site
 
                     case "4":
                         /* =======================COMMAND TO DELETE A RESTAURANT BY ID ====================== */
@@ -108,25 +149,60 @@ public class Client {
                         } else {
                             System.out.println("Restaurant deleted successfully!");
                         }
-                       // in.nextLine();
                         break;
 
-
-                    /* ================================================================================ */
-
-                    /* ================================================================================ */
-
                     case "5":
+                        System.out.println("Exiting...");
+                        return;
+                    default:
+                        System.out.println("Invalid choice");
+                        break;
+                }
+            }
 
-                    /* ========================= COMMAND TO DISPLAY ALL BOOKINGS========================= */
-                    socketWriter.println("displayAllBookings");
-                    String jsonString3 = socketReader.nextLine();
-                    // Parse JSON response
-                    JSONObject response2 = new JSONObject(jsonString3);
-                    System.out.println("Client message: Response from server Time: " + jsonString3);
-                    break;
 
-                    case "6":
+        } catch (InputMismatchException | NumberFormatException e) {
+            System.out.println("Incorrect input. Please re-enter the option");
+        }
+
+    }
+
+    private void bookingMenu(PrintWriter socketWriter, Scanner socketReader, Scanner in) {
+
+        try {
+
+            String command = "";
+
+            while (!command.equalsIgnoreCase("exit")) {
+                System.out.println("╔══════════════════════════════════════╗");
+                System.out.println("║            BOOKING MENU              ║");
+                System.out.println("╠══════════════════════════════════════╣");
+                System.out.println("║ Please choose an option:             ║");
+                System.out.println("╠══════════════════════════════════════╣");
+                System.out.println("║ 1. Display all bookings              ║");
+                System.out.println("║ 2. Get booking by ID                 ║");
+                System.out.println("║ 3. Add a booking                     ║");
+                System.out.println("║ 4. Delete a booking                  ║");
+                System.out.println("║ 5. Exit                              ║");
+                System.out.println("╚══════════════════════════════════════╝");
+                System.out.print("> ");
+
+                command = in.nextLine();
+
+
+                switch (command.toLowerCase()) {
+
+                    case "1":
+
+                        /* ========================= COMMAND TO DISPLAY ALL BOOKINGS========================= */
+                        socketWriter.println("displayAllBookings");
+                        String jsonString3 = socketReader.nextLine();
+                        // Parse JSON response
+                        JSONObject response2 = new JSONObject(jsonString3);
+                        System.out.println("Client message: Response from server Time: " + jsonString3);
+                        break;
+
+                    case "2":
                         /* ========================= COMMAND TO DISPLAY RESTAURANTS BY ID======================= */
                         System.out.println("Please enter a Booking ID: ");
                         String stringId = in.nextLine();
@@ -140,23 +216,23 @@ public class Client {
                         else {
                             System.out.println(jsonString4);
                         }
-                        // in.nextLine(); // Consume newline character
+                        // in.nextLine();
                         break;
 
-                    case "7":
+                    case "3":
                         /* ===========================COMMAND TO ADD A BOOKING ============================ */
                         System.out.println("Please enter restaurant details in the format:addBooking, Restaurant ID, Customer Name, Customer Phone, Booking Date (YYYY-MM-DD), Booking Time (HH:MM), Number of Guests");
                         System.out.print("> ");
                         String bookingDetails = in.nextLine();
                         String addCommandBooking = "addBooking " + bookingDetails;
-                        socketWriter.println(addCommandBooking );              // Send request to server
+                        socketWriter.println(addCommandBooking);              // Send request to server
 
                         String responseBooking = socketReader.nextLine(); // Wait for response from server
                         System.out.println(responseBooking);
                         // in.nextLine();
                         break;   // addBooking, 10, felix, 898989895, 2023-11-03, 20:00:00, 2
 
-                    case "8":
+                    case "4":
                         /* =======================COMMAND TO DELETE A BOOKING BY ID ====================== */
                         System.out.println("Enter ID of the booking to delete: ");
                         System.out.print("> ");
@@ -173,11 +249,8 @@ public class Client {
                         // in.nextLine();
                         break;
 
-                    /* ================================================================================ */
 
-                    /* ================================================================================ */
-
-                    case "9":
+                    case "5":
                         System.out.println("Exiting...");
                         return;
                     default:
@@ -185,12 +258,23 @@ public class Client {
                         break;
                 }
             }
-            socket.close();
 
-        } catch (IOException e) {
-            System.out.println("Client message: IOException: " + e);
+        } catch (InputMismatchException | NumberFormatException e) {
+            System.out.println("Incorrect input. Please re-enter the option");
         }
     }
+
+
 }
+
+
+
+
+
+
+
+
+
+
 
 

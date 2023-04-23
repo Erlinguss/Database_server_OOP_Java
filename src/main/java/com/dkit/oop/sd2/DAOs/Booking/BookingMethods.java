@@ -12,12 +12,6 @@ import java.util.Scanner;
 
 public class BookingMethods {
 
-
-
-    //======================================================================================
-    //                                   BOOKING METHODS
-    //======================================================================================
-
     /*============METHOD TO DISPLAY ALL BOOKING DETAILS AD IN WHICH RESTAURANT=============*/
     public static void findAllBookingsWithRestaurantNames(BookingDaoInterface BookingDao) throws SQLException {
 

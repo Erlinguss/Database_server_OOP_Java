@@ -4,17 +4,12 @@ import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
 public class RestaurantMethods {
-
-    //======================================================================================
-    //                                   RESTAURANT METHODS
-    //======================================================================================
 
     /*==========================METHOD TO DISPLAY ALL RESTAURANTS=========================*/
     public static void viewAllRestaurants(RestaurantDaoInterface restDao) throws SQLException {
