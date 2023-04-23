@@ -19,6 +19,7 @@ package com.dkit.oop.sd2.DAOs;
  * can be replaced by mock DAO objects.
  */
 
+import com.dkit.oop.sd2.DTOs.BookingDTO;
 import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 
 import com.dkit.oop.sd2.Exceptions.DaoException;
@@ -27,9 +28,9 @@ import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
 
-public interface UserDaoInterface
-{
+public interface UserDaoInterface {
 
+    // RESTAURANT
     List<RestaurantDTO> findAllRestaurants() throws SQLException;
 
     RestaurantDTO findRestaurantById(int id) throws SQLException;
@@ -44,5 +45,10 @@ public interface UserDaoInterface
 
     List<RestaurantDTO> findRestaurantsUsingFilter(Comparator<RestaurantDTO> comparator) throws SQLException;
 
-}
 
+    //BOOKING
+
+    List<BookingDTO> findAllBookingsWithRestaurantNames() throws SQLException;
+
+    BookingDTO findBookingId(int id)throws SQLException;
+}

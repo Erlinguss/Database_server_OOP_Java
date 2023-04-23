@@ -16,6 +16,7 @@ package com.dkit.oop.sd2.DAOs;
  */
 
 
+import com.dkit.oop.sd2.DTOs.BookingDTO;
 import com.dkit.oop.sd2.DTOs.RestaurantDTO;
 import com.dkit.oop.sd2.Exceptions.DaoException;
 import java.sql.Connection;
@@ -257,6 +258,19 @@ public class MySqlRestaurantDao extends MySqlDao implements UserDaoInterface
         List<RestaurantDTO> restaurants = findAllRestaurants();
         restaurants.sort(comparator);
         return restaurants;
+    }
+
+
+
+    //BOOKING METHODS
+    @Override
+    public List<BookingDTO> findAllBookingsWithRestaurantNames() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public BookingDTO findBookingId(int id) throws SQLException {
+        return null;
     }
 
 
