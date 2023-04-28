@@ -15,10 +15,9 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class App {
-    private static Set<Integer> cache = new HashSet<>(); // Feature 6
+    private static Set<Integer> IdCache = new HashSet<>();
 
     public static void main(String[] args) throws SQLException, IOException {
-
 
         App Menu = new App();
         Menu.start();
