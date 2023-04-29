@@ -143,7 +143,6 @@ public class Server {
                         // send message to client
                         socketWriter.println(response1);
 
-
                     }
 
                     /* ============================ DELETE A RESTAURANT BY ID ============================ */
