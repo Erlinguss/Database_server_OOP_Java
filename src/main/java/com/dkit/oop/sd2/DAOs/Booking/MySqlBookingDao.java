@@ -41,7 +41,6 @@ public class MySqlBookingDao extends MySqlDao implements BookingDaoInterface {
                 String booking_time = resultSet.getString("booking_time");
                 int num_guests = resultSet.getInt("num_guests");
                BookingDTO booking = new BookingDTO(booking_id, restaurant_id, restaurant_name, customer_name, customer_phone, booking_date, booking_time, num_guests);
-               // BookingDTO booking = new BookingDTO(booking_id, restaurant_id, customer_name, customer_phone, booking_date, num_guests);
 
                 bookings.add(booking);
             }
