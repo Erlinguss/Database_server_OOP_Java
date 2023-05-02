@@ -44,7 +44,6 @@ public class App {
                         + "║ 3. Exit                              ║\n"
                         + "╚══════════════════════════════════════╝";
 
-
         final int Restaurant = 1;
         final int Booking = 2;
         final int Exit = 3;
@@ -311,6 +310,5 @@ public class App {
 
         } while (option != Exit);
     }
-
 
 }

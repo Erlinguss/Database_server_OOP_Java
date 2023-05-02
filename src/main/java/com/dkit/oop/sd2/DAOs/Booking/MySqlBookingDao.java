@@ -196,8 +196,4 @@ public class MySqlBookingDao extends MySqlDao implements BookingDaoInterface {
         return  bookings;
     }
 
-
-
-
-
 }
